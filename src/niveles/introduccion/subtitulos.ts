@@ -3,7 +3,7 @@ type Subtitulo = {
   texto: string
 }
 
-const transcripciones: Subtitulo[] = [
+export const transcripciones: Subtitulo[] = [
   { tiempo: 0, texto: '¡Muy buenas! Yo soy ROCIO.' },
   { tiempo: 2, texto: 'Voy a acompañarte mientras aprendemos' },
   { tiempo: 3.8, texto: 'cómo funciona un ordenador' },

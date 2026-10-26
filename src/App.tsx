@@ -1,7 +1,7 @@
-import Introduction from './niveles/introduction/Introduction'
+import Introduccion from './niveles/introduccion/Introduccion'
 
 function App() {
-  return <Introduction />
+  return <Introduccion />
 }
 
 export default App
