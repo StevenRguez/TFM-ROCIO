@@ -5,15 +5,17 @@ import GestorSubtitulos from '../../componentes_reutilizables/Gestor_subtitulos/
 import logoPizarra from '../../assets/logo_pizarra.png'
 import './Introduccion.css'
 
-const audiosIntroduccion = [
-  '/Audios_generados/Introduccion.wav'
-]
+const audioIntroduccion = '/Audios_generados/Introduccion.wav'
 
-function Introduccion() {
+type IntroduccionProps = {
+  onTerminar: () => void
+}
+
+function Introduccion({ onTerminar }: IntroduccionProps) {
   const [mostrarLogo, setMostrarLogo] = useState(false)
   const [animacionLogo, setAnimacionLogo] = useState(false)
   const [tiempoAudio, setTiempoAudio] = useState(-1)
-  const [indiceAudioActual, setIndiceAudioActual] = useState(0)
+  const [/*indiceAudioActual*/, setIndiceAudioActual] = useState(0)
   const [reproducirAudio, setReproducirAudio] = useState(false)
 
   useEffect(() => {
@@ -59,13 +61,13 @@ function Introduccion() {
   return (
     <main className="pizarra">
       <GestorAudio
-        audios={audiosIntroduccion}
+        src={audioIntroduccion}
         reproducir={reproducirAudio}
-        onTimeUpdate={(tiempo, indice) => {
-          setTiempoAudio(tiempo)
-          setIndiceAudioActual(indice)
+        onTimeUpdate={setTiempoAudio}
+        onEnded={() => {
+          setTiempoAudio(-1)
+          onTerminar()
         }}
-        onEnded={() => setTiempoAudio(-1)}
       />
 
       {mostrarLogo && (

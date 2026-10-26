@@ -1,0 +1,16 @@
+.pizarra {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #355b48;
+  background-image:
+    radial-gradient(
+      ellipse at 20% 25%,
+      rgba(210, 225, 205, 0.035),
+      transparent 45%
+    ),
+    radial-gradient(
+      ellipse at 80% 75%,
+      rgba(15, 40, 27, 0.07),
+      transparent 50%
+    );
+}

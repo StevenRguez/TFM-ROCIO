@@ -1,7 +1,4 @@
-type Subtitulo = {
-  tiempo: number
-  texto: string
-}
+import type { Subtitulo } from '../../componentes_reutilizables/Gestor_subtitulos/Gestor_subtitulos'
 
 export const transcripciones: Subtitulo[] = [
   { tiempo: 0, texto: '¡Muy buenas! Yo soy ROCIO.' },

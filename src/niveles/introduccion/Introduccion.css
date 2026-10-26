@@ -1,19 +1,5 @@
-.pizarra {
-  width: 100%;
-  min-height: 100vh;
-  background-color: #355b48;
-  background-image:
-    radial-gradient(
-      ellipse at 20% 25%,
-      rgba(210, 225, 205, 0.035),
-      transparent 45%
-    ),
-    radial-gradient(
-      ellipse at 80% 75%,
-      rgba(15, 40, 27, 0.07),
-      transparent 50%
-    );
-}
+@import '../../componentes_reutilizables/Estilos/Pizarra.css';
+@import '../../componentes_reutilizables/Estilos/logo_tiza.css';
 
 @keyframes dibujarLogo {
   0% {
@@ -34,18 +20,6 @@
 }
 
 .logo {
-  max-width: 100%;
-  max-height: 60vh;
-  height: auto;
-  display: block;
-
-  /* Centrado */
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  /* Opacidad */
   opacity: 0;
 }
 

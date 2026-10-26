@@ -1,6 +1,6 @@
 import './Gestor_subtitulos.css'
 
-type Subtitulo = {
+export type Subtitulo = {
   tiempo: number
   texto: string
 }
