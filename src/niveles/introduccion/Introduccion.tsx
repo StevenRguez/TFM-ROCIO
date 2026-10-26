@@ -1,60 +1,44 @@
-import { useEffect } from 'react' // Registra eventos
-import { useRef }    from 'react' // Referencia al audio 
-import { useState }  from 'react' // Guarda si se ha comenzado el recorrido
+import { useEffect, useState } from 'react'
 import { transcripciones } from './subtitulos'
+import GestorAudio from '../../componentes_reutilizables/Gestor_audios/Gestor_audios'
+import GestorSubtitulos from '../../componentes_reutilizables/Gestor_subtitulos/Gestor_subtitulos'
+import logoPizarra from '../../assets/logo_pizarra.png'
 import './Introduccion.css'
 
+const audiosIntroduccion = [
+  '/Audios_generados/Introduccion.wav'
+]
 
-function App() {
+function Introduccion() {
   const [mostrarLogo, setMostrarLogo] = useState(false)
   const [animacionLogo, setAnimacionLogo] = useState(false)
-  const [subtituloActual, setSubtituloActual] = useState('')
-
-  const audioRef = useRef<HTMLAudioElement | null>(null)
-  const iniciadaRef = useRef(false)
-
-  // Actualiza los subtítulos que se están mostrando por pantalla 
-  // siguiendo una serie de marcas temporales
-  function actualizarSubtitulo() {
-    const audio = audioRef.current
-
-    if (!audio) return
-
-    const tiempoActual = audio.currentTime
-
-    const subtitulo = [...transcripciones]
-      .reverse()
-      .find((item) => item.tiempo <= tiempoActual)
-
-    setSubtituloActual(subtitulo?.texto ?? '')
-  }
+  const [tiempoAudio, setTiempoAudio] = useState(-1)
+  const [indiceAudioActual, setIndiceAudioActual] = useState(0)
+  const [reproducirAudio, setReproducirAudio] = useState(false)
 
   useEffect(() => {
     let temporizador: number | undefined
+    let iniciada = false
 
     function manejarTecla(event: KeyboardEvent) {
-      // Evita repetir el inicio al mantener una tecla pulsada.
-      if (event.repeat || iniciadaRef.current) return
+      if (event.repeat || iniciada) return
 
-      iniciadaRef.current = true
+      iniciada = true
 
-      // Intenta activar la pantalla completa.
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().catch((error) => {
-          console.error('No se pudo activar pantalla completa:', error)
+          console.error(
+            'No se pudo activar pantalla completa:',
+            error,
+          )
         })
       }
 
-      // Comienza la narración.
-      audioRef.current?.play().catch((error) => {
-        console.error('No se pudo reproducir la introducción:', error)
-      })
+      setReproducirAudio(true)
 
-      // El logo empieza a dibujarse 1,5 segundos después.
       temporizador = window.setTimeout(() => {
         setMostrarLogo(true)
 
-        // Permite reiniciar la animación CSS al mostrar el logo.
         requestAnimationFrame(() => {
           setAnimacionLogo(true)
         })
@@ -74,28 +58,30 @@ function App() {
 
   return (
     <main className="pizarra">
-      <audio
-        ref={audioRef}
-        src="/Audios_generados/Introduccion.wav"
-        preload="auto"
-        onTimeUpdate={actualizarSubtitulo}
-        onEnded={() => setSubtituloActual('')}
+      <GestorAudio
+        audios={audiosIntroduccion}
+        reproducir={reproducirAudio}
+        onTimeUpdate={(tiempo, indice) => {
+          setTiempoAudio(tiempo)
+          setIndiceAudioActual(indice)
+        }}
+        onEnded={() => setTiempoAudio(-1)}
       />
 
       {mostrarLogo && (
         <img
           className={`logo ${animacionLogo ? 'logo--dibujando' : ''}`}
-          src="src/assets/logo_pizarra.png"
+          src={logoPizarra}
           alt="Logotipo del sistema dibujado con efecto tiza"
         />
       )}
 
-      <div className="subtitulos" aria-live="polite">
-        {/* Aquí aparecerá el texto de la narración */}
-        {subtituloActual}
-      </div>
+      <GestorSubtitulos
+        tiempo={tiempoAudio}
+        transcripciones={transcripciones}
+      />
     </main>
   )
 }
 
-export default App
+export default Introduccion

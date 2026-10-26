@@ -1,4 +1,4 @@
-
+import './App.css'
 import { StrictMode } from 'react'  /* Ayuda a detextar problemas durante
                                     el desarrollo. */
 import { createRoot } from 'react-dom/client' /* Crea el punto desde el

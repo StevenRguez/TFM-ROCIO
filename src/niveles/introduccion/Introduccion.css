@@ -53,21 +53,3 @@
   /* Animación */
   animation: dibujarLogo 2.5s ease-out forwards;
 }
-
-.subtitulos {
-  position: fixed;
-  left: 10%;
-  right: 10%;
-  bottom: 6%;
-  z-index: 10;
-
-  color: #f5f3e9;
-  font-size: clamp(1.5rem, 3vw, 3.5rem); /* Tamaño mínimo, 
-                                       tamaño por defecto, tamaño máximo */
-  line-height: 1.5;
-  text-align: center;
-
-  font-family: "Atkinson Hyperlegible", calibri;
-
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
-}
