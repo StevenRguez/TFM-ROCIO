@@ -4,6 +4,8 @@ import GestorAudio from '../../componentes_reutilizables/Gestor_audios/Gestor_au
 import GestorSubtitulos from '../../componentes_reutilizables/Gestor_subtitulos/Gestor_subtitulos'
 import Caja from '../../componentes_reutilizables/Elementos_interactivos/Caja'
 import logoPizarra from '../../assets/logo_pizarra.png'
+import imagenRaton from '../../assets/raton.png'
+import imagencursor from '../../assets/cursor.png'
 import './Raton.css'
 
 const secuenciaRaton = [
@@ -34,6 +36,10 @@ function Raton({ onTerminar }: { onTerminar: () => void }) {
   const [reproducirAudio, setReproducirAudio] = useState(false)
   const [tiempoAudio, setTiempoAudio] = useState(-1)
   const [esperandoInteraccion, setEsperandoInteraccion] = useState(false)
+  const [audioEnReproduccion, setAudioEnReproduccion] = useState(-1)
+
+  const [mostrarImagenRaton, setMostrarImagenRaton] = useState(false)
+  const [mostrarImagenCursor, setMostrarImagenCursor] = useState(false)
 
   const audioActual = secuenciaRaton[indiceAudioActual]
   const transcripciones = subtitulosPorAudio[audioActual.subtitulos]
@@ -84,13 +90,34 @@ function Raton({ onTerminar }: { onTerminar: () => void }) {
         src={audioActual.audio}
         reproducir={reproducirAudio}
         onTimeUpdate={setTiempoAudio}
-        onEnded={alTerminarAudio}
+        onPlay={() => setAudioEnReproduccion(indiceAudioActual)}
+        onEnded={() => {
+          setAudioEnReproduccion(-1)
+          alTerminarAudio()
+        }}  
       />
 
       <GestorSubtitulos
         tiempo={tiempoAudio}
         transcripciones={transcripciones}
       />
+
+      {indiceAudioActual === 1 && (
+        <img
+          className="imagen-raton"
+          src={imagenRaton}
+          alt="Imagen del ratón de un ordenador"
+        />
+      )}
+
+      {indiceAudioActual === 2 && (
+        <img
+          className="imagen-cursor"
+          src={imagencursor}
+          alt="Imagen del cursor que aparece al realizar movimientos con 
+          un ratón"
+        />
+      )}
 
       {esperandoInteraccion && (
         <Caja
@@ -102,9 +129,7 @@ function Raton({ onTerminar }: { onTerminar: () => void }) {
         />
       )}
 
-      {/* Conectaremos aquí la interacción real con la caja azul. */}
-      {/* continuarTrasInteraccion se llamará cuando el cursor la alcance. */}
-    </main>
+      </main>
   )
 }
 

@@ -2,5 +2,25 @@
 @import '../../componentes_reutilizables/Estilos/logo_tiza.css';
 
 .logo {
-  opacity: 0.5;
+  opacity: 0.4;
+}
+
+.imagen-raton { 
+  position: absolute;
+  width: 475px;
+  height: auto;
+  top: 50%;
+  left: 15%;
+  transform: translate(-50%, -50%);
+  object-fit: contain;
+} 
+  
+.imagen-cursor {
+  position: absolute;
+  width: 250px;
+  height: auto;
+  top: 50%;
+  left: 85%;
+  transform: translate(-50%, -50%);
+  object-fit: contain;
 }

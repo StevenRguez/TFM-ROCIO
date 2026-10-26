@@ -11,14 +11,14 @@ export const subtitulosPorAudio = {
   ],
   cursor: [
     { tiempo: 0, texto: 'Se llama cursor.' },
-    { tiempo: 0.9, texto: 'Muestra por pantalla' },
-    { tiempo: 2.4, texto: 'Los movimientos que haces con el ratón' },
+    { tiempo: 0.9, texto: 'Muestra por la pantalla' },
+    { tiempo: 2.4, texto: 'Los movimientos que haces con el ratón.' },
   ],
   interaccionCursor: [
     { tiempo: 0, texto: 'Hagamos una prueba.' },
-    { tiempo: 1, texto: 'Intenta mover el cursor hasta esta caja azul' },
+    { tiempo: 1, texto: 'Intenta mover el cursor hasta esta caja azul.' },
   ],
   felicitacionCursor: [
-    { tiempo: 0, texto: '¡Perfecto! Continuemos' },
+    { tiempo: 0, texto: '¡Perfecto! Continuemos.' },
   ]
 }

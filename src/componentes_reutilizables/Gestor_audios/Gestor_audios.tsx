@@ -5,6 +5,7 @@ type GestorAudioProps = {
   reproducir: boolean
   onTimeUpdate?: (tiempo: number) => void
   onEnded?: () => void
+  onPlay?: () => void
 }
 
 function GestorAudio({
@@ -12,6 +13,7 @@ function GestorAudio({
   reproducir,
   onTimeUpdate,
   onEnded,
+  onPlay,
 }: GestorAudioProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
@@ -41,12 +43,11 @@ function GestorAudio({
     <audio
       ref={audioRef}
       preload="auto"
+      onPlay={() => onPlay?.()}
       onTimeUpdate={(event) => {
         onTimeUpdate?.(event.currentTarget.currentTime)
       }}
-      onEnded={() => {
-        onEnded?.()
-      }}
+      onEnded={() => onEnded?.()}
     />
   )
 }
