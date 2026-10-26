@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { subtitulosPorAudio } from './subtitulos'
 import GestorAudio from '../../componentes_reutilizables/Gestor_audios/Gestor_audios'
 import GestorSubtitulos from '../../componentes_reutilizables/Gestor_subtitulos/Gestor_subtitulos'
+import Caja from '../../componentes_reutilizables/Elementos_interactivos/Caja'
 import logoPizarra from '../../assets/logo_pizarra.png'
 import './Raton.css'
 
@@ -63,11 +64,11 @@ function Raton({ onTerminar }: { onTerminar: () => void }) {
     setIndiceAudioActual((indice) => indice + 1)
   }
 
-  function continuarTrasInteraccion() {
+  function continuarTrasInteraccion(indice: number) {
     if (!esperandoInteraccion) return
 
     setEsperandoInteraccion(false)
-    setIndiceAudioActual(4)
+    setIndiceAudioActual(indice)
     setReproducirAudio(true)
   }
 
@@ -92,9 +93,13 @@ function Raton({ onTerminar }: { onTerminar: () => void }) {
       />
 
       {esperandoInteraccion && (
-        <p>
-          Mueve el cursor hasta la caja azul para continuar.
-        </p>
+        <Caja
+          color="#7bc5e5"
+          tamano={200}
+          interaccion="hover"
+          posicion="aleatoria"
+          onActivar={() => continuarTrasInteraccion(4)}
+        />
       )}
 
       {/* Conectaremos aquí la interacción real con la caja azul. */}

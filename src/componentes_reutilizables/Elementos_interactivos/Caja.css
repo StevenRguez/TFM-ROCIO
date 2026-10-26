@@ -1,0 +1,23 @@
+.caja {
+  position: absolute;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.caja:hover {
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.caja:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 5px;
+}
+
+.caja:disabled {
+  cursor: default;
+  opacity: 0.65;
+}
