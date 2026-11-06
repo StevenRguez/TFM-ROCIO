@@ -5,22 +5,30 @@
   opacity: 0.4;
 }
 
-.imagen-raton { 
+.imagenes-tutorial {
+  position: relative;
+  width: 100%;
+  height: 70vh;
+}
+
+.imagen-raton, 
+.imagen-cursor, 
+.imagen-botones-raton, 
+.imagen-clic-izquierdo {
   position: absolute;
-  width: 475px;
-  height: auto;
-  top: 50%;
-  left: 15%;
+  max-width: 70%;
+  max-height: 60vh;
+  width: 35%;
+  height: 60%;
   transform: translate(-50%, -50%);
   object-fit: contain;
+  top: 75%;
+}
+
+.imagen-raton, .imagen-botones-raton { 
+  left: 15%;
 } 
   
-.imagen-cursor {
-  position: absolute;
-  width: 250px;
-  height: auto;
-  top: 50%;
+.imagen-cursor, .imagen-clic-izquierdo {
   left: 85%;
-  transform: translate(-50%, -50%);
-  object-fit: contain;
 }

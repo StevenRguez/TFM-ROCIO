@@ -3,7 +3,7 @@ import Introduccion from './niveles/introduccion/Introduccion'
 import RatonNivel1 from './niveles/raton-nivel_1/Raton'
 
 function App() {
-  const [nivelActual, setNivelActual] = useState(0)
+  const [nivelActual, setNivelActual] = useState(1)
 
   switch (nivelActual) {
     case 0:

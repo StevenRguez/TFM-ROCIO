@@ -5,7 +5,9 @@ import GestorSubtitulos from '../../componentes_reutilizables/Gestor_subtitulos/
 import Caja from '../../componentes_reutilizables/Elementos_interactivos/Caja'
 import logoPizarra from '../../assets/logo_pizarra.png'
 import imagenRaton from '../../assets/raton.png'
-import imagencursor from '../../assets/cursor.png'
+import imagenCursor from '../../assets/cursor.png'
+import imagenBotones from '../../assets/botones_raton.png'
+import clicIzquierdo from '../../assets/clic_izquierdo.png'
 import './Raton.css'
 
 const secuenciaRaton = [
@@ -29,6 +31,30 @@ const secuenciaRaton = [
     audio: '/Audios_generados/Raton1-1-5.wav',
     subtitulos: 'felicitacionCursor',
   },
+  {
+    audio: '/Audios_generados/Raton1-2-1.wav',
+    subtitulos: 'introduccionClicIzquierdo',
+  },
+  {
+    audio: '/Audios_generados/Raton1-2-2.wav',
+    subtitulos: 'clicIzquierdoCirculoAmarillo',
+  },
+  {
+    audio: '/Audios_generados/Raton1-2-3.wav',
+    subtitulos: 'cambioColorCirculoAmarillo',
+  },
+  {
+    audio: '/Audios_generados/Raton1-2-4.wav',
+    subtitulos: 'cambioColorCirculoNaranja',
+  },
+  {
+    audio: '/Audios_generados/Raton1-2-5.wav',
+    subtitulos: 'explicacionBotonIzquierdo',
+  },
+  {
+    audio: '/Audios_generados/Raton1-2-6.wav',
+    subtitulos: 'ejemplosClicIzquierdo',
+  },
 ] as const
 
 function Raton({ onTerminar }: { onTerminar: () => void }) {
@@ -36,10 +62,8 @@ function Raton({ onTerminar }: { onTerminar: () => void }) {
   const [reproducirAudio, setReproducirAudio] = useState(false)
   const [tiempoAudio, setTiempoAudio] = useState(-1)
   const [esperandoInteraccion, setEsperandoInteraccion] = useState(false)
-  const [audioEnReproduccion, setAudioEnReproduccion] = useState(-1)
 
-  const [mostrarImagenRaton, setMostrarImagenRaton] = useState(false)
-  const [mostrarImagenCursor, setMostrarImagenCursor] = useState(false)
+  const [/*audioEnReproduccion*/, setAudioEnReproduccion] = useState(-1)
 
   const audioActual = secuenciaRaton[indiceAudioActual]
   const transcripciones = subtitulosPorAudio[audioActual.subtitulos]
@@ -53,14 +77,15 @@ function Raton({ onTerminar }: { onTerminar: () => void }) {
 
     // Tras el cuarto audio, esperamos a que el usuario
     // complete la interacción con la caja azul.
-    if (indiceAudioActual === 3) {
+    if (indiceAudioActual === 3 || indiceAudioActual === 6 || 
+      indiceAudioActual === 7) {
       setReproducirAudio(false)
       setEsperandoInteraccion(true)
       return
     }
 
-    // El quinto audio ha terminado: finalizamos el nivel.
-    if (indiceAudioActual === 4) {
+    // El último audio ha terminado: finalizamos el nivel.
+    if (indiceAudioActual === 10) {
       setReproducirAudio(false)
       onTerminar()
       return
@@ -75,6 +100,15 @@ function Raton({ onTerminar }: { onTerminar: () => void }) {
 
     setEsperandoInteraccion(false)
     setIndiceAudioActual(indice)
+    setReproducirAudio(true)
+  }
+
+  const [colorCirculo, setColorCirculo] = useState('#e0fa1a')
+
+  function cambiarColorCirculo() {
+    setColorCirculo('#ff7b00')
+    setEsperandoInteraccion(false)
+    setIndiceAudioActual(7)
     setReproducirAudio(true)
   }
 
@@ -102,30 +136,73 @@ function Raton({ onTerminar }: { onTerminar: () => void }) {
         transcripciones={transcripciones}
       />
 
-      {indiceAudioActual === 1 && (
-        <img
-          className="imagen-raton"
-          src={imagenRaton}
-          alt="Imagen del ratón de un ordenador"
-        />
-      )}
+      <div className="imagenes-tutorial">
 
-      {indiceAudioActual === 2 && (
-        <img
-          className="imagen-cursor"
-          src={imagencursor}
-          alt="Imagen del cursor que aparece al realizar movimientos con 
-          un ratón"
-        />
-      )}
+        {indiceAudioActual === 1 && (
+          <img
+            className="imagen-raton"
+            src={imagenRaton}
+            alt="Imagen del ratón de un ordenador"
+          />
+        )}
 
-      {esperandoInteraccion && (
+        {indiceAudioActual === 2 && (
+          <img
+            className="imagen-cursor"
+            src={imagenCursor}
+            alt="Imagen del cursor que aparece al realizar movimientos con 
+            un ratón"
+          />
+        )}
+
+        {indiceAudioActual === 5 && (
+          <img
+            className="imagen-botones-raton"
+            src={imagenBotones}
+            alt="Imagen de los distintos botones que puede tener un ratón"
+          />
+        )}
+
+        {indiceAudioActual === 6 && (
+          <img
+            className="imagen-clic-izquierdo"
+            src={clicIzquierdo}
+            alt="Imagen de un ratón de ordenador haciendo clic izquierdo"
+          />
+        )}
+
+      </div>  
+
+      {esperandoInteraccion && indiceAudioActual === 3 && (
         <Caja
+          forma="cuadrado"
           color="#7bc5e5"
           tamano={200}
           interaccion="hover"
           posicion="aleatoria"
           onActivar={() => continuarTrasInteraccion(4)}
+        />
+      )}
+
+      {(esperandoInteraccion || indiceAudioActual === 7) && (
+        <Caja
+          forma="circulo"
+          color="colorCirculo"
+          tamano={200}
+          interaccion="click"
+          posicion="aleatoria"
+          onActivar={() => cambiarColorCirculo()}
+        />
+      )}
+
+      {esperandoInteraccion && indiceAudioActual === 7 && (
+        <Caja
+          forma="circulo"
+          color="#ff7b00"
+          tamano={200}
+          interaccion="click"
+          posicion="aleatoria"
+          onActivar={() => continuarTrasInteraccion(8)}
         />
       )}
 

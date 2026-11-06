@@ -4,6 +4,7 @@ import './Caja.css'
 type CajaProps = {
   color?: string
   tamano?: number
+  forma?: 'cuadrado' | 'circulo'
   interaccion?: 'hover' | 'click'
   posicion?: 'aleatoria' | 'fija'
   onActivar: () => void
@@ -12,6 +13,7 @@ type CajaProps = {
 function Caja({
   color = '#4E9FC1',
   tamano = 100,
+  forma = 'cuadrado',
   interaccion = 'click',
   posicion = 'aleatoria',
   onActivar,
@@ -47,6 +49,7 @@ function Caja({
         width: `${tamano}px`,
         height: `${tamano}px`,
         backgroundColor: color,
+        borderRadius: forma === 'circulo' ? '50%' : '0%',
       }}
       onMouseEnter={
         interaccion === 'hover' ? activarCaja : undefined
@@ -54,7 +57,7 @@ function Caja({
       onClick={
         interaccion === 'click' ? activarCaja : undefined
       }
-      aria-label="Caja interactiva"
+      aria-label="Elemento interactivo"
       disabled={activada}
     />
   )
