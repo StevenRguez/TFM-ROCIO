@@ -18,9 +18,8 @@ function Caja({
   posicion = 'aleatoria',
   onActivar,
 }: CajaProps) {
-  const [activada, setActivada] = useState(false)
 
-  const estiloPosicion =
+  const [estiloPosicion] = useState(() =>
     posicion === 'aleatoria'
       ? {
           left: `${Math.random() * 80 + 10}%`,
@@ -32,11 +31,9 @@ function Caja({
           top: '50%',
           transform: 'translate(-50%, -50%)',
         }
+    )
 
   function activarCaja() {
-    if (activada) return
-
-    setActivada(true)
     onActivar()
   }
 
@@ -58,7 +55,6 @@ function Caja({
         interaccion === 'click' ? activarCaja : undefined
       }
       aria-label="Elemento interactivo"
-      disabled={activada}
     />
   )
 }
