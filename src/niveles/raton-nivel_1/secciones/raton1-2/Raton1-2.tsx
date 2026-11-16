@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { subtitulosPorAudio } from './subtitulos1-2'
 import GestorAudio from '@/componentes_reutilizables/Gestor_audios/Gestor_audios'
 import GestorSubtitulos from '@/componentes_reutilizables/Gestor_subtitulos/Gestor_subtitulos'
-import Caja from '@/componentes_reutilizables/Elementos_interactivos/Caja'
+import Caja from '@/componentes_reutilizables/Elementos_interactivos/Caja/Caja'
 
 import logoPizarra from '@/assets/logo_pizarra.png'
 import imagenBotones from '@/assets/botones_raton.png'
@@ -38,9 +38,7 @@ const secuenciaRaton12 = [
   },
 ] as const
 
-type Raton12Props = {
-  onTerminar: () => void
-}
+type Raton12Props = { onTerminar: () => void }
 
 function Raton12({ onTerminar }: Raton12Props) {
 

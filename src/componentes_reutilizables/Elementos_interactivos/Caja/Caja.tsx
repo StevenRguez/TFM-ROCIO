@@ -5,7 +5,7 @@ type CajaProps = {
   color?: string
   tamano?: number
   forma?: 'cuadrado' | 'circulo'
-  interaccion?: 'hover' | 'click'
+  interaccion?: 'hover' | 'click' | 'doubleClick'
   posicion?: 'aleatoria' | 'fija'
   onActivar: () => void
 }
@@ -53,6 +53,9 @@ function Caja({
       }
       onClick={
         interaccion === 'click' ? activarCaja : undefined
+      }
+      onDoubleClick={
+        interaccion === 'doubleClick' ? activarCaja : undefined
       }
       aria-label="Elemento interactivo"
     />

@@ -1,9 +1,9 @@
-
 import { useEffect, useState, type MouseEvent } from 'react'
 
 import { subtitulosPorAudio } from './subtitulos1-3'
 import GestorAudio from '@/componentes_reutilizables/Gestor_audios/Gestor_audios'
 import GestorSubtitulos from '@/componentes_reutilizables/Gestor_subtitulos/Gestor_subtitulos'
+import MenuContextual from '@/componentes_reutilizables/Elementos_interactivos/MenuContextual/MenuContextual'
 
 import logoPizarra from '@/assets/logo_pizarra.png'
 import clicDerecho from '@/assets/clic_derecho.png'
@@ -40,7 +40,7 @@ const secuenciaRaton13 = [
   {
     audio: '/Audios_generados/raton-nivel_1/1-3_Clic_derecho/Raton1-3-7.wav',
     subtitulos: 'felicitacionClicDerecho',
-  },
+  }
 ] as const
 
 type Raton13Props = {
@@ -102,28 +102,21 @@ function Raton13({ onTerminar }: Raton13Props) {
     setReproducirAudio(true)
   }
 
-  // Gestiona el clic derecho y sustituye el menú del navegador.
+  // Gestiona el clic derecho durante toda la sección.
   function gestionarMenuContextual(evento: MouseEvent<HTMLElement>) {
+    // Impide mostrar el menú nativo del navegador.
     evento.preventDefault()
 
-    // No mostramos el menú en los pasos iniciales.
-    if (
-      pasoActual === 'aperturaClicDerecho' ||
-      pasoActual === 'ubicacionClicDerecho' ||
-      pasoActual === 'felicitacionClicDerecho'
-    ) {
-      return
-    }
-
-    // Colocamos el menú donde se ha realizado el clic.
+    // Sitúa el menú en la posición del cursor.
     setPosicionMenu({
       x: evento.clientX,
       y: evento.clientY,
     })
 
+    // Muestra el menú contextual en cualquier momento.
     setMenuVisible(true)
 
-    // En la comprobación, el clic derecho permite avanzar.
+    // La interacción solo permite avanzar en el paso previsto.
     if (
       pasoActual === 'comprobacionClicDerecho' &&
       esperandoInteraccion
@@ -132,12 +125,12 @@ function Raton13({ onTerminar }: Raton13Props) {
     }
   }
 
-  // Oculta el menú contextual.
+  // Cierra el menú contextual.
   function cerrarMenuContextual() {
     setMenuVisible(false)
   }
 
-  // Gestiona la selección de la opción del ejercicio.
+  // Gestiona la opción interactiva del menú.
   function seleccionarSiguientePaso() {
     if (
       pasoActual !== 'ejercicioClicDerecho' ||
@@ -209,37 +202,22 @@ function Raton13({ onTerminar }: Raton13Props) {
 
       </div>
 
-      {/* Menú contextual interactivo */}
+      {/* Menú contextual personalizado */}
       {menuVisible && (
-        <div
-          className="menu-contextual"
-          style={{
-            left: posicionMenu.x,
-            top: posicionMenu.y,
-          }}
-          onClick={(evento) => evento.stopPropagation()}
-        >
-
-          <button type="button" disabled>
-            Opción 1
-          </button>
-
-          <button type="button" disabled>
-            Opción 2
-          </button>
-
-          <button
-            type="button"
-            disabled={
-              pasoActual !== 'ejercicioClicDerecho' ||
-              !esperandoInteraccion
+        <MenuContextual
+          posicion={posicionMenu}
+          opciones={[
+            { texto: 'Opción 1' },
+            { texto: 'Opción 2' },
+            {
+              texto: 'Ir al siguiente paso',
+              deshabilitada:
+                pasoActual !== 'ejercicioClicDerecho' ||
+                !esperandoInteraccion,
+              alSeleccionar: seleccionarSiguientePaso
             }
-            onClick={seleccionarSiguientePaso}
-          >
-            Ir al siguiente paso
-          </button>
-
-        </div>
+          ]}
+        />
       )}
 
     </main>
