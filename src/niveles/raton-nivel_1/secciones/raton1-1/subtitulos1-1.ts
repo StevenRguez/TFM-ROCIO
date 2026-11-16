@@ -1,0 +1,36 @@
+/**
+ * Líneas simultáneas:	    1-2
+ * Caracteres por línea:	  30-35
+ * Caracteres por segundo:	10-12
+ * Palabras por subtítulo:	4-8
+ */
+
+export const subtitulosPorAudio = {
+  // Audio 0
+  presentacion: [
+    { tiempo: 0,   texto: 'Probablemente…' },
+    { tiempo: 1,   texto: 'tengas algo como esto sobre tu mesa.' },
+  ],
+  // Audio 1
+  funcion: [
+    { tiempo: 0,   texto: 'Es un ratón.' },
+    { tiempo: 0.9, texto: 'Imita tus movimientos dentro de la pantalla.' },
+    { tiempo: 3,   texto: 'Como si fuera el volante de un coche.' },
+    { tiempo: 5,   texto: 'Cuando mueves el ratón, aparece esto:' },
+  ],
+  // Audio 2
+  cursor: [
+    { tiempo: 0,   texto: 'Se llama cursor.' },
+    { tiempo: 0.9, texto: 'Muestra por la pantalla' },
+    { tiempo: 2.4, texto: 'Los movimientos que haces con el ratón.' },
+  ],
+  // Audio 3
+  interaccionCursor: [
+    { tiempo: 0,   texto: 'Hagamos una prueba.' },
+    { tiempo: 1,   texto: 'Intenta mover el cursor hasta esta caja azul.' },
+  ],
+  // Audio 4
+  felicitacionCursor: [
+    { tiempo: 0,   texto: '¡Perfecto! Continuemos.' },
+  ]
+}
