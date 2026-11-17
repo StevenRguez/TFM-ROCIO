@@ -114,7 +114,7 @@ function Raton11({ onTerminar }: Raton11Props) {
           <img
             className="imagen-raton"
             src={imagenRaton}
-            alt="Imagen del ratón de un ordenador"
+            alt="Imagen del ratón de un ordenador."
           />
         )}
 
@@ -123,7 +123,7 @@ function Raton11({ onTerminar }: Raton11Props) {
           <img
             className="imagen-cursor"
             src={imagenCursor}
-            alt="Imagen del cursor que aparece al mover un ratón"
+            alt="Imagen del cursor que aparece al mover un ratón."
           />
         )}
 

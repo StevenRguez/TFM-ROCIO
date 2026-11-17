@@ -141,7 +141,7 @@ function Raton12({ onTerminar }: Raton12Props) {
           <img
             className="imagen-botones-raton"
             src={imagenBotones}
-            alt="Imagen de los distintos botones de un ratón"
+            alt="Imagen de los distintos botones de un ratón."
           />
         )}
 
@@ -150,7 +150,7 @@ function Raton12({ onTerminar }: Raton12Props) {
           <img
             className="imagen-clic-izquierdo"
             src={clicIzquierdo}
-            alt="Imagen de un ratón realizando un clic izquierdo"
+            alt="Imagen de un ratón realizando un clic izquierdo."
           />
         )}
 

@@ -1,0 +1,23 @@
+.contenedor-deposito {
+  position: absolute;
+  right: 10%;
+  top: 75%;
+  transform: translateY(-50%);
+
+  width: 180px;
+  height: 180px;
+
+  border: 3px dashed #EAB9C4;
+  border-radius: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.objeto-depositado {
+  width: 100px;
+  height: 100px;
+  background-color: #84C3D8;
+  border-radius: 4px;
+}

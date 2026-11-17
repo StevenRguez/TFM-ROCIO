@@ -6,6 +6,7 @@ import GestorSubtitulos from '@/componentes_reutilizables/Gestor_subtitulos/Gest
 import Caja from '@/componentes_reutilizables/Elementos_interactivos/Caja/Caja'
 
 import logoPizarra from '@/assets/logo_pizarra.png'
+import imagenDobleClic from '@/assets/doble_clic.png'
 
 import '../../Raton.css'
 
@@ -156,6 +157,20 @@ function Raton14({ onTerminar }: Raton14Props) {
         tiempo={tiempoAudio}
         transcripciones={transcripciones}
       />
+
+      <div className="imagenes-tutorial">
+
+        {/* Imagen explicativa del ratón */}
+        {pasoActual == "aperturaDobleClic" && (
+          <img
+            className="imagen-doble-clic"
+            src={imagenDobleClic}
+            alt="Imagen explicativa de la ejecución del doble clic 
+            en un ratón de ordenador."
+          />
+        )}
+      
+      </div>
 
       {/* Elementos interactivos */}
       {mostrarCaja && (

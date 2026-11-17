@@ -1,5 +1,5 @@
-@import '../../componentes_reutilizables/Estilos/Pizarra.css';
-@import '../../componentes_reutilizables/Estilos/logo_tiza.css';
+@import '@/componentes_reutilizables/Estilos/Pizarra.css';
+@import '@/componentes_reutilizables/Estilos/logo_tiza.css';
 
 .logo {
   opacity: 0.4;
@@ -16,7 +16,8 @@
 .imagen-botones-raton, 
 .imagen-clic-izquierdo,
 .imagen-clic-derecho,
-.imagen-cuadro-dialogo {
+.imagen-cuadro-dialogo,
+.imagen-doble-clic {
   position: absolute;
   max-width: 70%;
   max-height: 60vh;
@@ -35,7 +36,8 @@
   left: 15%;
 } 
   
-.imagen-cursor, .imagen-clic-izquierdo, .imagen-cuadro-dialogo {
+.imagen-cursor, .imagen-clic-izquierdo, .imagen-cuadro-dialogo, 
+.imagen-doble-clic {
   left: 85%;
 }
 

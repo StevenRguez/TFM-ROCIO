@@ -12,7 +12,7 @@ export const subtitulosPorAudio = {
   ],
   ejemploDobleClic: [
     { tiempo: 0,   texto: 'Es muy simple. Mira:' },
-    { tiempo: 1.8,   texto: 'Prueba a llevar el cursor hasta este cuadrado,' }
+    { tiempo: 1.8, texto: 'Prueba a llevar el cursor hasta este cuadrado,' }
   ],
   explicacionDobleClic: [
     { tiempo: 0,   texto: 'y pulsa el botón izquierdo del ratón' },

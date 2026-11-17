@@ -188,7 +188,7 @@ function Raton13({ onTerminar }: Raton13Props) {
           <img
             className="imagen-clic-derecho"
             src={clicDerecho}
-            alt="Imagen de un ratón de ordenador haciendo clic derecho"
+            alt="Imagen de un ratón de ordenador haciendo clic derecho."
           />
         )}
 

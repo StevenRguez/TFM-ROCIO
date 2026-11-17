@@ -1,0 +1,272 @@
+/* ================================================
+   ANIMACIÓN DIDÁCTICA: ARRASTRAR Y SOLTAR
+   ================================================ */
+
+/* Contenedor principal */
+.animacion-arrastre {
+  position: absolute;
+
+  width: 600px;
+  height: 220px;
+
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  transform-origin: center center;
+
+  pointer-events: none;
+  user-select: none;
+  z-index: 5;
+}
+
+/* ================================================
+   ESCENA DEL ARRASTRE
+   ================================================ */
+
+.animacion-arrastre-escena {
+  position: relative;
+  width: 440px;
+  height: 220px;
+  flex-shrink: 0;
+}
+
+/* Destino del cuadrado */
+.animacion-arrastre-destino {
+  position: absolute;
+
+  left: 78%;
+  top: 50%;
+
+  width: 80px;
+  height: 80px;
+
+  border: 3px dashed #84C3D8;
+  border-radius: 8px;
+
+  box-sizing: border-box;
+  transform: translate(-50%, -50%);
+}
+
+/* Cuadrado arrastrado */
+.animacion-arrastre-caja {
+  position: absolute;
+
+  left: 18%;
+  top: 50%;
+
+  width: 65px;
+  height: 65px;
+
+  background-color: #EAB9C4;
+  border-radius: 5px;
+
+  transform: translate(-50%, -50%);
+
+  animation: demo-desplazar-caja 5s linear infinite;
+}
+
+/* Cursor simulado */
+.animacion-arrastre-cursor {
+  position: absolute;
+
+  left: 5%;
+  top: 78%;
+
+  width: 36px;
+  height: auto;
+
+  animation: demo-mover-cursor 5s linear infinite;
+}
+
+/* ================================================
+   INDICADOR DEL BOTÓN DEL RATÓN
+   ================================================ */
+
+.animacion-arrastre-indicador {
+  width: 140px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+  color: #f5f8f5;
+  font-size: 16px;
+  text-align: center;
+}
+
+/* Contenedor de las dos imágenes */
+.animacion-arrastre-raton {
+  position: relative;
+  width: 110px;
+}
+
+.animacion-arrastre-raton img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Imagen del ratón sin pulsar */
+.animacion-arrastre-raton-libre {
+  animation: demo-raton-libre 5s steps(1, end) infinite;
+}
+
+/* Imagen del ratón con el botón pulsado */
+.animacion-arrastre-raton-pulsado {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+
+  animation: demo-raton-pulsado 5s steps(1, end) infinite;
+}
+
+/* ================================================
+   MOVIMIENTO DEL CURSOR
+   ================================================ */
+
+@keyframes demo-mover-cursor {
+
+  /* Posición inicial */
+  0% {
+    left: 5%;
+    top: 78%;
+    opacity: 1;
+  }
+
+  /* Se acerca y pulsa el cuadrado */
+  18%, 28% {
+    left: 18%;
+    top: 50%;
+    opacity: 1;
+  }
+
+  /* Arrastra hasta el destino */
+  72%, 78% {
+    left: 78%;
+    top: 50%;
+    opacity: 1;
+  }
+
+  /* Se aleja después de soltar */
+  87% {
+    left: 88%;
+    top: 78%;
+    opacity: 1;
+  }
+
+  /* Regresa al inicio sin mostrar el salto */
+  89% {
+    left: 88%;
+    top: 78%;
+    opacity: 0;
+  }
+
+  90% {
+    left: 5%;
+    top: 78%;
+    opacity: 0;
+  }
+
+  95%, 100% {
+    left: 5%;
+    top: 78%;
+    opacity: 1;
+  }
+}
+
+/* ================================================
+   MOVIMIENTO DEL CUADRADO
+   ================================================ */
+
+@keyframes demo-desplazar-caja {
+
+  /* Permanece inmóvil hasta que se pulsa */
+  0%, 28% {
+    left: 18%;
+    opacity: 1;
+  }
+
+  /* Se arrastra hasta el destino */
+  72%, 84% {
+    left: 78%;
+    opacity: 1;
+  }
+
+  /* Desaparece brevemente para reiniciar */
+  88% {
+    left: 78%;
+    opacity: 0;
+  }
+
+  89% {
+    left: 18%;
+    opacity: 0;
+  }
+
+  /* Reaparece en su posición original */
+  95%, 100% {
+    left: 18%;
+    opacity: 1;
+  }
+}
+
+/* ================================================
+   ALTERNANCIA DE LOS BOTONES DEL RATÓN
+   ================================================ */
+
+/* Ratón sin pulsar */
+@keyframes demo-raton-libre {
+  0%, 19.99%, 78%, 100% {
+    opacity: 1;
+  }
+
+  20%, 77.99% {
+    opacity: 0;
+  }
+}
+
+/* Ratón con el botón izquierdo pulsado */
+@keyframes demo-raton-pulsado {
+  0%, 19.99%, 78%, 100% {
+    opacity: 0;
+  }
+
+  20%, 77.99% {
+    opacity: 1;
+  }
+}
+
+/* ================================================
+   ACCESIBILIDAD
+   ================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .animacion-arrastre-caja,
+  .animacion-arrastre-cursor,
+  .animacion-arrastre-raton-libre,
+  .animacion-arrastre-raton-pulsado {
+    animation: none;
+  }
+
+  .animacion-arrastre-caja {
+    left: 78%;
+    opacity: 1;
+  }
+
+  .animacion-arrastre-cursor {
+    left: 88%;
+    top: 78%;
+    opacity: 1;
+  }
+
+  .animacion-arrastre-raton-libre {
+    opacity: 1;
+  }
+
+  .animacion-arrastre-raton-pulsado {
+    opacity: 0;
+  }
+}
