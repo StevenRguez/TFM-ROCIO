@@ -5,11 +5,12 @@ import Raton13 from './secciones/raton1-3/Raton1-3'
 import Raton14 from './secciones/raton1-4/Raton1-4'
 import Raton15 from './secciones/raton1-5/Raton1-5'
 import Raton16 from './secciones/raton1-6/Raton1-6'
+import Raton17 from './secciones/raton1-7/Raton1-7'
 
 function Raton({ onTerminar }: { onTerminar: () => void }) {
-  const [seccionActual, setSeccionActual] = useState(0)
+  const [seccionActual, setSeccionActual] = useState(6)
 
-  const TOTAL_SECCIONES = 6
+  const TOTAL_SECCIONES = 7
 
   function avanzarSeccion() {
     if (seccionActual === TOTAL_SECCIONES - 1) {
@@ -29,6 +30,7 @@ function Raton({ onTerminar }: { onTerminar: () => void }) {
       {seccionActual === 3 && <Raton14 onTerminar={avanzarSeccion} />}
       {seccionActual === 4 && <Raton15 onTerminar={avanzarSeccion} />}
       {seccionActual === 5 && <Raton16 onTerminar={avanzarSeccion} />}
+      {seccionActual === 6 && <Raton17 onTerminar={avanzarSeccion} />}
 
     </div>
   )

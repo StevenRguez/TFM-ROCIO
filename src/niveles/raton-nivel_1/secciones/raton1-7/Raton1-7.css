@@ -1,0 +1,128 @@
+/* Reutilización de los estilos del nivel 1.5 */
+@import '../raton1-5/Raton1-5.css';
+
+/* =========================================
+   PIZARRA: PRUEBA FINAL DEL RATÓN
+   ========================================= */
+
+/* Ampliamos la pizarra para permitir el scroll global */
+.pizarra.pizarra-prueba-final {
+  position: relative;
+  width: 100%;
+  height: 220vh;
+  min-height: 220vh;
+  overflow: visible;
+}
+
+/* El logotipo se desplaza junto a la pizarra */
+.pizarra.pizarra-prueba-final .logo {
+  position: absolute;
+  left: 50%;
+  top: 50vh;
+
+  transform: translate(-50%, -50%);
+}
+
+/* =========================================
+   CONTENEDOR DE DEPÓSITO
+   ========================================= */
+
+/*
+  Heredamos de Raton1-5.css:
+  - Dimensiones de 180 x 180 píxeles.
+  - Borde rosa discontinuo.
+  - Esquinas redondeadas.
+  - Alineación del contenido.
+*/
+
+/* Mantenemos el contenedor visible durante el scroll */
+.pizarra-prueba-final .contenedor-deposito {
+  position: fixed;
+  right: 10%;
+  top: 75%;
+  transform: translateY(-50%);
+  z-index: 5;
+}
+
+
+/* =========================================
+   BOTÓN PARA AVANZAR DE NIVEL
+   ========================================= */
+
+.pizarra-prueba-final .boton-avanzar-nivel {
+  position: absolute;
+  left: 50%;
+  top: 40vh;
+  transform: translateX(-50%);
+
+  width: min(75vw, 650px);
+  min-height: 150px;
+
+  padding: 30px 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: #84C3D8;
+  color: #173b46;
+
+  border: none;
+  border-radius: 12px;
+
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 600;
+  text-align: center;
+
+  cursor: pointer;
+
+  transition:
+    background-color 200ms ease,
+    transform 200ms ease;
+}
+
+/* Respuesta visual al colocar el cursor */
+.pizarra-prueba-final .boton-avanzar-nivel:hover {
+  background-color: #C0E3F1;
+}
+
+/* Indicador de selección mediante teclado */
+.pizarra-prueba-final .boton-avanzar-nivel:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 5px;
+}
+
+/* Respuesta visual durante la pulsación */
+.pizarra-prueba-final .boton-avanzar-nivel:active {
+  background-color: #6EADC3;
+}
+
+
+/* =========================================
+   ACCESIBILIDAD
+   ========================================= */
+
+/* Respeta la preferencia de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  .pizarra-prueba-final .boton-avanzar-nivel {
+    transition: none;
+  }
+}
+
+/* Imagen explicativa que aparece en la pantalla visible */
+.pizarra-prueba-final .imagen-explicativa-flotante {
+  position: fixed;
+
+  left: 15%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  width: 300px;
+  max-width: 80vw;
+  max-height: 40vh;
+  object-fit: contain;
+
+  z-index: 10;
+  pointer-events: none;
+}
