@@ -7,10 +7,12 @@ import Raton15 from './secciones/raton1-5/Raton1-5'
 import Raton16 from './secciones/raton1-6/Raton1-6'
 
 function Raton({ onTerminar }: { onTerminar: () => void }) {
-  const [seccionActual, setSeccionActual] = useState(5)
+  const [seccionActual, setSeccionActual] = useState(0)
+
+  const TOTAL_SECCIONES = 6
 
   function avanzarSeccion() {
-    if (seccionActual === 2) {
+    if (seccionActual === TOTAL_SECCIONES - 1) {
       onTerminar()
       return
     }

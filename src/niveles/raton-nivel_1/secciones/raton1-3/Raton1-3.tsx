@@ -1,6 +1,7 @@
-import { useEffect, useState, type MouseEvent } from 'react'
+import { useState, type MouseEvent } from 'react'
 
 import { subtitulosPorAudio } from './subtitulos1-3'
+import { useSecuenciasNarradas } from '@/componentes_reutilizables/Gestor_audios/useSecuenciasNarradas'
 import GestorAudio from '@/componentes_reutilizables/Gestor_audios/Gestor_audios'
 import GestorSubtitulos from '@/componentes_reutilizables/Gestor_subtitulos/Gestor_subtitulos'
 import MenuContextual from '@/componentes_reutilizables/Elementos_interactivos/MenuContextual/MenuContextual'
@@ -28,6 +29,7 @@ const secuenciaRaton13 = [
   {
     audio: '/Audios_generados/raton-nivel_1/1-3_Clic_derecho/Raton1-3-4.wav',
     subtitulos: 'comprobacionClicDerecho',
+    esperarInteraccion: true
   },
   {
     audio: '/Audios_generados/raton-nivel_1/1-3_Clic_derecho/Raton1-3-5.wav',
@@ -36,6 +38,7 @@ const secuenciaRaton13 = [
   {
     audio: '/Audios_generados/raton-nivel_1/1-3_Clic_derecho/Raton1-3-6.wav',
     subtitulos: 'ejercicioClicDerecho',
+    esperarInteraccion: true
   },
   {
     audio: '/Audios_generados/raton-nivel_1/1-3_Clic_derecho/Raton1-3-7.wav',
@@ -49,58 +52,27 @@ type Raton13Props = {
 
 function Raton13({ onTerminar }: Raton13Props) {
 
-  // Control de la secuencia de audios.
-  const [indiceAudioActual, setIndiceAudioActual] = useState(0)
-  const [reproducirAudio, setReproducirAudio] = useState(false)
-  const [tiempoAudio, setTiempoAudio] = useState(-1)
-  const [esperandoInteraccion, setEsperandoInteraccion] = useState(false)
+  // Gestiona la reproducción de la secuencia narrada.
+  const {
+    audioActual,
+    pasoActual,
+    tiempoAudio,
+    reproducirAudio,
+    esperandoInteraccion,
+    actualizarTiempo,
+    alTerminarAudio,
+    continuarTrasInteraccion
+  } = useSecuenciasNarradas(
+    secuenciaRaton13,
+    onTerminar
+  )
+
+  // Obtiene los subtítulos de la narración actual.
+  const transcripciones = subtitulosPorAudio[audioActual.subtitulos]
 
   // Control del menú contextual.
   const [menuVisible, setMenuVisible] = useState(false)
   const [posicionMenu, setPosicionMenu] = useState({ x: 0, y: 0 })
-
-  const audioActual = secuenciaRaton13[indiceAudioActual]
-  const pasoActual = audioActual.subtitulos
-  const transcripciones = subtitulosPorAudio[pasoActual]
-
-  // Inicia la reproducción al entrar en la sección.
-  useEffect(() => {
-    setReproducirAudio(true)
-  }, [])
-
-  // Gestiona la finalización de cada audio.
-  function alTerminarAudio() {
-    setTiempoAudio(-1)
-
-    // Estos pasos requieren una interacción para continuar.
-    if (
-      pasoActual === 'comprobacionClicDerecho' ||
-      pasoActual === 'ejercicioClicDerecho'
-    ) {
-      setReproducirAudio(false)
-      setEsperandoInteraccion(true)
-      return
-    }
-
-    // Último audio: termina la sección.
-    if (pasoActual === 'felicitacionClicDerecho') {
-      setReproducirAudio(false)
-      onTerminar()
-      return
-    }
-
-    // Continúa automáticamente con el siguiente audio.
-    setIndiceAudioActual((indice) => indice + 1)
-  }
-
-  // Continúa después de una interacción correcta.
-  function continuarTrasInteraccion() {
-    if (!esperandoInteraccion) return
-
-    setEsperandoInteraccion(false)
-    setIndiceAudioActual((indice) => indice + 1)
-    setReproducirAudio(true)
-  }
 
   // Gestiona el clic derecho durante toda la sección.
   function gestionarMenuContextual(evento: MouseEvent<HTMLElement>) {
@@ -171,7 +143,7 @@ function Raton13({ onTerminar }: Raton13Props) {
       <GestorAudio
         src={audioActual.audio}
         reproducir={reproducirAudio}
-        onTimeUpdate={setTiempoAudio}
+        onTimeUpdate={actualizarTiempo}
         onEnded={alTerminarAudio}
       />
 

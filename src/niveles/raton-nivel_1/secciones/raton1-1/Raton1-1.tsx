@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react'
 import { subtitulosPorAudio } from './subtitulos1-1'
+
+import { useSecuenciasNarradas } from '@/componentes_reutilizables/Gestor_audios/useSecuenciasNarradas'
 import GestorAudio from '@/componentes_reutilizables/Gestor_audios/Gestor_audios'
 import GestorSubtitulos from '@/componentes_reutilizables/Gestor_subtitulos/Gestor_subtitulos'
+
 import Caja from '@/componentes_reutilizables/Elementos_interactivos/Caja/Caja'
 
 import logoPizarra from '@/assets/logo_pizarra.png'
@@ -25,7 +27,8 @@ const secuenciaRaton11 = [
   },
   { 
     audio: '/Audios_generados/raton-nivel_1/1-1_Que_es_el_raton/Raton1-1-4.wav', 
-    subtitulos: 'interaccionCursor' 
+    subtitulos: 'interaccionCursor',
+    esperarInteraccion: true
   },
   { 
     audio: '/Audios_generados/raton-nivel_1/1-1_Que_es_el_raton/Raton1-1-5.wav', 
@@ -37,53 +40,22 @@ type Raton11Props = { onTerminar: () => void }
 
 function Raton11({ onTerminar }: Raton11Props) {
 
-  // Estado de la secuencia de audios.
-  const [indiceAudioActual, setIndiceAudioActual] = useState(0)
-  const [reproducirAudio, setReproducirAudio] = useState(false)
-  const [tiempoAudio, setTiempoAudio] = useState(-1)
+  // Gestiona la reproducción de la secuencia narrada.
+  const {
+    indiceAudioActual,
+    audioActual,
+    tiempoAudio,
+    reproducirAudio,
+    actualizarTiempo,
+    alTerminarAudio,
+    continuarTrasInteraccion
+  } = useSecuenciasNarradas(
+    secuenciaRaton11,
+    onTerminar
+  )
 
-  // Estado de las interacciones.
-  const [esperandoInteraccion, setEsperandoInteraccion] = useState(false)
-
-  // Audio y subtítulos correspondientes al paso actual.
-  const audioActual = secuenciaRaton11[indiceAudioActual]
+  // Obtiene los subtítulos de la narración actual.
   const transcripciones = subtitulosPorAudio[audioActual.subtitulos]
-
-  // Iniciar automáticamente la primera narración.
-  useEffect(() => {
-    setReproducirAudio(true)
-  }, [])
-
-  // Gestionar la finalización de cada narración.
-  function alTerminarAudio() {
-    setTiempoAudio(-1)
-
-    // Esperar a que el usuario interactúe con la caja azul.
-    if (indiceAudioActual === 3) {
-      setReproducirAudio(false)
-      setEsperandoInteraccion(true)
-      return
-    }
-
-    // Última narración: finalizar la sección.
-    if (indiceAudioActual === secuenciaRaton11.length - 1) {
-      setReproducirAudio(false)
-      onTerminar()
-      return
-    }
-
-    // Continuar con la siguiente narración.
-    setIndiceAudioActual((indice) => indice + 1)
-  }
-
-  // Continuar cuando el usuario complete el ejercicio.
-  function continuarTrasInteraccion() {
-    if (!esperandoInteraccion) return
-
-    setEsperandoInteraccion(false)
-    setIndiceAudioActual(4)
-    setReproducirAudio(true)
-  }
 
   return (
     <main className="pizarra">
@@ -98,7 +70,7 @@ function Raton11({ onTerminar }: Raton11Props) {
       <GestorAudio
         src={audioActual.audio}
         reproducir={reproducirAudio}
-        onTimeUpdate={setTiempoAudio}
+        onTimeUpdate={actualizarTiempo}
         onEnded={alTerminarAudio}
       />
 
@@ -107,6 +79,7 @@ function Raton11({ onTerminar }: Raton11Props) {
         transcripciones={transcripciones}
       />
 
+      {/* Imágenes ilustrativas */}
       <div className="imagenes-tutorial">
 
         {/* Imagen explicativa del ratón */}

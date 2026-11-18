@@ -1,8 +1,10 @@
 import { useEffect, useState, useRef } from 'react'
 
 import { subtitulosPorAudio } from './subtitulos1-4'
+import { useSecuenciasNarradas } from '@/componentes_reutilizables/Gestor_audios/useSecuenciasNarradas'
 import GestorAudio from '@/componentes_reutilizables/Gestor_audios/Gestor_audios'
 import GestorSubtitulos from '@/componentes_reutilizables/Gestor_subtitulos/Gestor_subtitulos'
+
 import Caja from '@/componentes_reutilizables/Elementos_interactivos/Caja/Caja'
 
 import logoPizarra from '@/assets/logo_pizarra.png'
@@ -23,6 +25,7 @@ const secuenciaRaton14 = [
   {
     audio: '/Audios_generados/raton-nivel_1/1-4_Doble_clic/Raton1-4-3.wav',
     subtitulos: 'explicacionDobleClic',
+    esperarInteraccion: true
   },
   {
     audio: '/Audios_generados/raton-nivel_1/1-4_Doble_clic/Raton1-4-4.wav',
@@ -31,6 +34,7 @@ const secuenciaRaton14 = [
   {
     audio: '/Audios_generados/raton-nivel_1/1-4_Doble_clic/Raton1-4-5.wav',
     subtitulos: 'explicacionRepeticionDobleClic',
+    esperarInteraccion: true
   },
   {
     audio: '/Audios_generados/raton-nivel_1/1-4_Doble_clic/Raton1-4-6.wav',
@@ -42,59 +46,37 @@ type Raton14Props = { onTerminar: () => void }
 
 function Raton14({ onTerminar }: Raton14Props) {
 
-  // Control de la secuencia de audios.
-  const [indiceAudioActual, setIndiceAudioActual] = useState(0)
-  const [reproducirAudio, setReproducirAudio] = useState(false)
-  const [tiempoAudio, setTiempoAudio] = useState(-1)
-  const [esperandoInteraccion, setEsperandoInteraccion] = useState(false)
+  // Gestiona la reproducción de la secuencia narrada.
+  const {
+    audioActual,
+    pasoActual,
+    tiempoAudio,
+    reproducirAudio,
+    esperandoInteraccion,
+    actualizarTiempo,
+    alTerminarAudio,
+    continuarTrasInteraccion
+  } = useSecuenciasNarradas(
+    secuenciaRaton14,
+    onTerminar
+  )
+
+  // Obtiene los subtítulos de la narración actual.
+  const transcripciones = subtitulosPorAudio[audioActual.subtitulos]
 
   // Estado del ejercicio interactivo.
   const [tamanyoCaja, setTamanyoCaja] = useState(200)
   const [cambioEnCurso, setCambioEnCurso] = useState(false)
   const temporizadorCambio = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const audioActual = secuenciaRaton14[indiceAudioActual]
-  const pasoActual = audioActual.subtitulos
-  const transcripciones = subtitulosPorAudio[pasoActual]
-
-  // Inicia la reproducción al entrar en la sección.
+  // Limpiar el temporizador si el componente desaparece
   useEffect(() => {
-    setReproducirAudio(true)
+    return () => {
+      if (temporizadorCambio.current !== null) {
+        clearTimeout(temporizadorCambio.current)
+      }
+    }
   }, [])
-
-  // Gestiona la finalización de cada audio.
-  function alTerminarAudio() {
-    setTiempoAudio(-1)
-
-    // Estos pasos requieren una interacción para continuar.
-    if (
-      pasoActual === 'explicacionDobleClic' ||
-      pasoActual === 'explicacionRepeticionDobleClic'
-    ) {
-      setReproducirAudio(false)
-      setEsperandoInteraccion(true)
-      return
-    }
-
-    // Último audio: termina la sección.
-    if (pasoActual === 'felicitacionDobleClic') {
-      setReproducirAudio(false)
-      onTerminar()
-      return
-    }
-
-    // Continúa automáticamente con el siguiente audio.
-    setIndiceAudioActual((indice) => indice + 1)
-  }
-
-  // Continúa después de una interacción correcta.
-  function continuarTrasInteraccion() {
-    if (!esperandoInteraccion) return
-
-    setEsperandoInteraccion(false)
-    setIndiceAudioActual((indice) => indice + 1)
-    setReproducirAudio(true)
-  }
 
   // Gestiona los cambios de color al hacer clic.
   function cambiarTamanyoCaja() {
@@ -112,15 +94,6 @@ function Raton14({ onTerminar }: Raton14Props) {
       setCambioEnCurso(false)
       continuarTrasInteraccion()
     }, 450)
-
-    // LImpiar el temporizador si el componente desaparece
-    useEffect(() => {
-      return () => {
-        if (temporizadorCambio.current !== null) {
-          clearTimeout(temporizadorCambio.current)
-        }
-      }
-    }, [])
   }
 
   const mostrarCajaRosa =
@@ -148,7 +121,7 @@ function Raton14({ onTerminar }: Raton14Props) {
       <GestorAudio
         src={audioActual.audio}
         reproducir={reproducirAudio}
-        onTimeUpdate={setTiempoAudio}
+        onTimeUpdate={actualizarTiempo}
         onEnded={alTerminarAudio}
       />
 

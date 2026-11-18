@@ -1,8 +1,10 @@
 import { useEffect, useState, useRef } from 'react'
 
 import { subtitulosPorAudio } from './subtitulos1-5'
+import { useSecuenciasNarradas } from '@/componentes_reutilizables/Gestor_audios/useSecuenciasNarradas'
 import GestorAudio from '@/componentes_reutilizables/Gestor_audios/Gestor_audios'
 import GestorSubtitulos from '@/componentes_reutilizables/Gestor_subtitulos/Gestor_subtitulos'
+
 import Caja from '@/componentes_reutilizables/Elementos_interactivos/Caja/Caja'
 
 import logoPizarra from '@/assets/logo_pizarra.png'
@@ -29,6 +31,7 @@ const secuenciaRaton15 = [
   {
     audio: '/Audios_generados/raton-nivel_1/1-5_Arrastrar_y_soltar/Raton1-5-5.wav',
     subtitulos: 'comienzoEjercicio',
+    esperarInteraccion: true
   },
   {
     audio: '/Audios_generados/raton-nivel_1/1-5_Arrastrar_y_soltar/Raton1-5-6.wav',
@@ -40,58 +43,29 @@ type Raton15Props = { onTerminar: () => void }
 
 function Raton15({ onTerminar }: Raton15Props) {
 
-  // Control de la secuencia de audios.
-  const [indiceAudioActual, setIndiceAudioActual] = useState(0)
-  const [reproducirAudio, setReproducirAudio] = useState(false)
-  const [tiempoAudio, setTiempoAudio] = useState(-1)
-  const [esperandoInteraccion, setEsperandoInteraccion] = useState(false)
+  // Gestiona la reproducción de la secuencia narrada.
+  const {
+    audioActual,
+    pasoActual,
+    tiempoAudio,
+    reproducirAudio,
+    esperandoInteraccion,
+    actualizarTiempo,
+    alTerminarAudio,
+    continuarTrasInteraccion
+  } = useSecuenciasNarradas(
+    secuenciaRaton15,
+    onTerminar
+  )
+
+  // Obtiene los subtítulos de la narración actual.
+  const transcripciones = subtitulosPorAudio[audioActual.subtitulos]
 
   // Referencia a la zona donde depositaremos el objeto.
   const contenedorRef = useRef<HTMLDivElement>(null)
 
   // Indica si el objeto se ha depositado correctamente.
   const [cajaDepositada, setCajaDepositada] = useState(false)
-
-  const audioActual = secuenciaRaton15[indiceAudioActual]
-  const pasoActual = audioActual.subtitulos
-  const transcripciones = subtitulosPorAudio[pasoActual]
-
-  // Inicia la reproducción al entrar en la sección.
-  useEffect(() => {
-    setReproducirAudio(true)
-  }, [])
-
-  // Gestiona la finalización de cada audio.
-  function alTerminarAudio() {
-    setTiempoAudio(-1)
-
-    // Estos pasos requieren una interacción para continuar.
-    if (
-      pasoActual === 'comienzoEjercicio') {
-      setReproducirAudio(false)
-      setEsperandoInteraccion(true)
-      return
-    }
-
-    // Último audio: termina la sección.
-    if (pasoActual === 'felicitacionArrastre') {
-      setReproducirAudio(false)
-      onTerminar()
-      return
-    }
-
-    // Continúa automáticamente con el siguiente audio.
-    setIndiceAudioActual((indice) => indice + 1)
-  }
-
-  // Continúa después de una interacción correcta.
-  function continuarTrasInteraccion() {
-    if (!esperandoInteraccion) return
-
-    setEsperandoInteraccion(false)
-    setIndiceAudioActual((indice) => indice + 1)
-    setReproducirAudio(true)
-  }
 
   function comprobarDeposito(posicion: { x: number; y: number }) {
     if (!esperandoInteraccion || cajaDepositada) return
@@ -132,7 +106,7 @@ function Raton15({ onTerminar }: Raton15Props) {
         pasoActual == "continuacionExplicacionArrastre") && (
         <AnimacionArrastre
           posicionX="50%"
-          posicionY="25%"
+          posicionY="18%"
           escala={2}
         />
       )}
@@ -141,7 +115,7 @@ function Raton15({ onTerminar }: Raton15Props) {
       <GestorAudio
         src={audioActual.audio}
         reproducir={reproducirAudio}
-        onTimeUpdate={setTiempoAudio}
+        onTimeUpdate={actualizarTiempo}
         onEnded={alTerminarAudio}
       />
 
@@ -173,7 +147,7 @@ function Raton15({ onTerminar }: Raton15Props) {
           tamano={125}
           interaccion="dragDrop"
           posicion="fija"
-          coordenadas={{x: 15, y:20}}
+          coordenadas={{x: 15, y: 20}}
           onSoltar={comprobarDeposito}
         />
       )}

@@ -1,8 +1,10 @@
 import { useEffect, useState} from 'react'
 
 import { subtitulosPorAudio } from './subtitulos1-6'
+import { useSecuenciasNarradas } from '@/componentes_reutilizables/Gestor_audios/useSecuenciasNarradas'
 import GestorAudio from '@/componentes_reutilizables/Gestor_audios/Gestor_audios'
 import GestorSubtitulos from '@/componentes_reutilizables/Gestor_subtitulos/Gestor_subtitulos'
+
 import Caja from '@/componentes_reutilizables/Elementos_interactivos/Caja/Caja'
 
 import logoPizarra from '@/assets/logo_pizarra.png'
@@ -29,6 +31,7 @@ const secuenciaRaton16 = [
   {
     audio: '/Audios_generados/raton-nivel_1/1-6_Rueda_raton/Raton1-6-4.wav',
     subtitulos: 'instruccionesEjercicioRueda',
+    esperarInteraccion: true
   },
   {
     audio: '/Audios_generados/raton-nivel_1/1-6_Rueda_raton/Raton1-6-5.wav',
@@ -40,28 +43,26 @@ type Raton16Props = { onTerminar: () => void }
 
 function Raton16({ onTerminar }: Raton16Props) {
 
-  // Control de la secuencia de audios.
-  const [indiceAudioActual, setIndiceAudioActual] = useState(0)
-  const [reproducirAudio, setReproducirAudio] = useState(false)
-  const [tiempoAudio, setTiempoAudio] = useState(-1)
-  const [esperandoInteraccion, setEsperandoInteraccion] = useState(false)
+  // Gestiona la reproducción de la secuencia narrada.
+  const {
+    audioActual,
+    pasoActual,
+    tiempoAudio,
+    reproducirAudio,
+    esperandoInteraccion,
+    actualizarTiempo,
+    alTerminarAudio,
+    continuarTrasInteraccion
+  } = useSecuenciasNarradas(
+    secuenciaRaton16,
+    finalizarSeccion
+  )
 
-  const audioActual = secuenciaRaton16[indiceAudioActual]
-  const pasoActual = audioActual.subtitulos
-  const transcripciones = subtitulosPorAudio[pasoActual]
+  // Obtiene los subtítulos de la narración actual.
+  const transcripciones = subtitulosPorAudio[audioActual.subtitulos]
 
   // Estados con los que permitir o impedir el scroll
   const [scrollHabilitado, setScrollHabilitado] = useState(false)
-
-  // Inicia la reproducción al entrar en la sección.
-  useEffect(() => {
-    setReproducirAudio(true)
-  }, [])
-
-  // Desplazamiento a la ubicación inicial al terminar el ejercicio
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
 
   // Función para permitir o impedir el scroll en función de la narración
   useEffect(() => {
@@ -82,40 +83,18 @@ function Raton16({ onTerminar }: Raton16Props) {
     }
   }, [scrollHabilitado])
 
-  // Gestiona la finalización de cada audio.
-  function alTerminarAudio() {
-    setTiempoAudio(-1)
-
-    // Estos pasos requieren una interacción para continuar.
-    if (
-      pasoActual === 'instruccionesEjercicioRueda') {
-      setReproducirAudio(false)
-      setEsperandoInteraccion(true)
-
-      // Permitimos desplazarse por la pizarra.
+  // Habilita el scroll cuando finalizan las instrucciones.
+  useEffect(() => {
+    if (pasoActual === 'instruccionesEjercicioRueda' && 
+      esperandoInteraccion) {
       setScrollHabilitado(true)
-      return
     }
+  }, [pasoActual, esperandoInteraccion])
 
-    // Último audio: termina la sección.
-    if (pasoActual === 'felicitacionRueda') {
-      window.scrollTo(0, 0)
-      setReproducirAudio(false)
-      onTerminar()
-      return
-    }
-
-    // Continúa automáticamente con el siguiente audio.
-    setIndiceAudioActual((indice) => indice + 1)
-  }
-
-  // Continúa después de una interacción correcta.
-  function continuarTrasInteraccion() {
-    if (!esperandoInteraccion) return
-
-    setEsperandoInteraccion(false)
-    setIndiceAudioActual((indice) => indice + 1)
-    setReproducirAudio(true)
+  // Desplazamiento a la ubicación inicial al terminar el ejercicio
+  function finalizarSeccion() {
+    window.scrollTo(0, 0)
+    onTerminar()
   }
 
   const mostrarImagenRueda =
@@ -137,7 +116,7 @@ function Raton16({ onTerminar }: Raton16Props) {
       <GestorAudio
         src={audioActual.audio}
         reproducir={reproducirAudio}
-        onTimeUpdate={setTiempoAudio}
+        onTimeUpdate={actualizarTiempo}
         onEnded={alTerminarAudio}
       />
 
