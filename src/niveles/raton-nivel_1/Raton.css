@@ -17,7 +17,9 @@
 .imagen-clic-izquierdo,
 .imagen-clic-derecho,
 .imagen-cuadro-dialogo,
-.imagen-doble-clic {
+.imagen-doble-clic,
+.imagen-rueda-raton,
+.imagen-movimiento-rueda {
   position: absolute;
   max-width: 70%;
   max-height: 60vh;
@@ -32,7 +34,8 @@
   width: 30%;
 }
 
-.imagen-raton, .imagen-botones-raton, .imagen-clic-derecho { 
+.imagen-raton, .imagen-botones-raton, .imagen-clic-derecho, 
+.imagen-rueda-raton, .imagen-movimiento-rueda { 
   left: 15%;
 } 
   

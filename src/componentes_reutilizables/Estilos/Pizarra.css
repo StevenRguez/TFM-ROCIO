@@ -18,3 +18,17 @@
   height: 100dvh;
   overflow: hidden;
 }
+
+/* Pizarra desplazable para el ejercicio de la rueda */
+.pizarra-rueda {
+  position: relative;
+  height: auto;
+  min-height: 500vh;
+  overflow: visible;
+}
+
+/* Impide desplazar toda la página */
+html.scroll-bloqueado,
+body.scroll-bloqueado {
+  overflow: hidden;
+}
