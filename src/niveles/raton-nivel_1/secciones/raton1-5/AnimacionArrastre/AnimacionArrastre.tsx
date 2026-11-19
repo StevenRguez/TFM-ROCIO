@@ -1,6 +1,6 @@
-import imagenCursor from '@/assets/cursor.png'
-import botonesRaton from '@/assets/botones_raton.png'
-import clicIzquierdo from '@/assets/clic_izquierdo.png'
+import imagenCursor from '@/assets/raton/cursor.png'
+import botonesRaton from '@/assets/raton/botones_raton.png'
+import clicIzquierdo from '@/assets/raton/clic_izquierdo.png'
 
 import './AnimacionArrastre.css'
 

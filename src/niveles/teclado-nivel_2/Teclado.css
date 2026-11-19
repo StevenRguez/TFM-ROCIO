@@ -1,0 +1,21 @@
+/* =========================================
+   NIVEL 2: TECLADO
+   ========================================= */
+
+@import '@/componentes_reutilizables/Estilos/Terminal.css';
+@import '@/componentes_reutilizables/Estilos/logo_terminal.css';
+
+.pantalla-teclado {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  background-color: #101716;
+}
+
+/* Pantalla de presentación del nivel */
+.pantalla-teclado .terminal-bienvenida {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

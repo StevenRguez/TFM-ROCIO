@@ -7,8 +7,8 @@ import GestorSubtitulos from '@/componentes_reutilizables/Gestor_subtitulos/Gest
 
 import Caja from '@/componentes_reutilizables/Elementos_interactivos/Caja/Caja'
 
-import logoPizarra from '@/assets/logo_pizarra.png'
-import imagenDobleClic from '@/assets/doble_clic.png'
+import logoPizarra from '@/assets/raton/logo_pizarra.png'
+import imagenDobleClic from '@/assets/raton/doble_clic.png'
 
 import '../../Raton.css'
 
@@ -153,6 +153,7 @@ function Raton14({ onTerminar }: Raton14Props) {
           tamano={tamanyoCaja}
           interaccion="doubleClick"
           posicion="aleatoria"
+          habilitada={esperandoInteraccion && !cambioEnCurso}
           onActivar={cambiarTamanyoCaja}
         />
       )}

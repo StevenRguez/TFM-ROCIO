@@ -18,7 +18,6 @@
   transition:
     width 0.3s ease-in-out,
     height 0.3s ease-in-out,
-    box-shadow 0.2s ease;
 }
 
 /* Respuesta visual de las cajas geométricas */
@@ -86,8 +85,6 @@
   filter: drop-shadow(
     3px 5px 4px rgba(0, 0, 0, 0.35)
   );
-
-  transition: filter 200ms ease;
 }
 
 /* Respuesta visual al colocar el cursor */
@@ -102,6 +99,24 @@
   );
 }
 
+/* =========================================
+   COMPORTAMIENTO DURANTE EL ARRASTRE
+   ========================================= */
+
+/* Evitamos recalcular la sombra mientras la caja se mueve */
+.caja-con-imagen.caja-arrastrando .caja-imagen,
+.caja-con-imagen.caja-arrastrando .caja-icono,
+.caja-con-imagen.caja-arrastrando:hover .caja-imagen,
+.caja-con-imagen.caja-arrastrando:hover .caja-icono {
+  filter: none;
+  transition: none;
+}
+
+/* Optimizamos la composición del elemento en movimiento */
+.caja.caja-arrastrando {
+  box-shadow: none;
+  will-change: transform;
+}
 
 /* =========================================
    ACCESIBILIDAD

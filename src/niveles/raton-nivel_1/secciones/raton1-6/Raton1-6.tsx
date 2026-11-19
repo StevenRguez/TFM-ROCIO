@@ -7,10 +7,10 @@ import GestorSubtitulos from '@/componentes_reutilizables/Gestor_subtitulos/Gest
 
 import Caja from '@/componentes_reutilizables/Elementos_interactivos/Caja/Caja'
 
-import logoPizarra from '@/assets/logo_pizarra.png'
-import imagenRuedaRaton from '@/assets/rueda_raton.png'
-import imagenMovimientoRueda from '@/assets/movimiento_rueda_raton.png'
-import imagenClicIzquierdo from '@/assets/clic_izquierdo.png'
+import logoPizarra from '@/assets/raton/logo_pizarra.png'
+import imagenRuedaRaton from '@/assets/raton/rueda_raton.png'
+import imagenMovimientoRueda from '@/assets/raton/movimiento_rueda_raton.png'
+import imagenClicIzquierdo from '@/assets/raton/clic_izquierdo.png'
 
 import '../../Raton.css'
 

@@ -13,3 +13,45 @@
   font-style: normal;
   font-display: swap;
 }
+
+/* =========================================
+   TRANSICIÓN ENTRE NIVELES
+   ========================================= */
+
+.transicion-nivel {
+  /* Ocupa toda la pantalla visible */
+  position: fixed;
+  inset: 0;
+
+  /* Color de transición */
+  background-color: #000000;
+
+  /* Invisible por defecto */
+  opacity: 0;
+
+  /* No interfiere con el usuario normalmente */
+  pointer-events: none;
+
+  /* Se sitúa por encima de todos los niveles */
+  z-index: 9999;
+
+  /* Transición suave */
+  transition: opacity 2100ms ease-in-out;
+}
+
+/* Oscurecemos progresivamente la pantalla */
+.transicion-nivel.visible {
+  opacity: 1;
+}
+
+/* Bloqueamos interacciones durante la transición */
+.transicion-nivel.en-curso {
+  pointer-events: auto;
+}
+
+/* Accesibilidad: movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  .transicion-nivel {
+    transition: none;
+  }
+}

@@ -7,7 +7,7 @@ import GestorSubtitulos from '@/componentes_reutilizables/Gestor_subtitulos/Gest
 
 import Caja from '@/componentes_reutilizables/Elementos_interactivos/Caja/Caja'
 
-import logoPizarra from '@/assets/logo_pizarra.png'
+import logoPizarra from '@/assets/raton/logo_pizarra.png'
 
 import AnimacionArrastre from './AnimacionArrastre/AnimacionArrastre'
 
@@ -67,6 +67,31 @@ function Raton15({ onTerminar }: Raton15Props) {
   // Indica si el objeto se ha depositado correctamente.
   const [cajaDepositada, setCajaDepositada] = useState(false)
 
+  // =========================================
+  // APARICIÓN DE ELEMENTOS
+  // =========================================
+
+  // Identifica si estamos en la narración del ejercicio.
+  const ejercicioEnCurso = pasoActual === 'comienzoEjercicio'
+
+  // El cuadrado azul aparece cuando la narradora
+  // comienza a mencionarlo (segundo 2.1).
+  const mostrarCaja = ejercicioEnCurso && !cajaDepositada && (
+    tiempoAudio >= 2.1 || esperandoInteraccion )
+
+  // El contenedor rosa aparece cuando la narradora
+  // menciona la zona discontinua (segundo 3).
+  //
+  // También permanece visible durante la felicitación
+  // si el objeto ya ha sido depositado.
+  const mostrarContenedor =
+    (ejercicioEnCurso && (tiempoAudio >= 3 || esperandoInteraccion)) ||
+    (pasoActual === 'felicitacionArrastre' && cajaDepositada)
+
+  // =========================================
+  // INTERACCIÓN DE ARRASTRAR Y SOLTAR
+  // =========================================
+
   function comprobarDeposito(posicion: { x: number; y: number }) {
     if (!esperandoInteraccion || cajaDepositada) return
 
@@ -78,13 +103,12 @@ function Raton15({ onTerminar }: Raton15Props) {
 
     // Comprobamos si se soltó el cursor dentro.
     const dentroHorizontalmente =
-      posicion.x >= limites.left &&
-      posicion.x <= limites.right
+      posicion.x >= limites.left && posicion.x <= limites.right
 
     const dentroVerticalmente =
-      posicion.y >= limites.top &&
-      posicion.y <= limites.bottom
+      posicion.y >= limites.top && posicion.y <= limites.bottom
 
+    // Si se ha depositado correctamente, completamos el ejercicio.
     if (dentroHorizontalmente && dentroVerticalmente) {
       setCajaDepositada(true)
       continuarTrasInteraccion()
@@ -126,8 +150,7 @@ function Raton15({ onTerminar }: Raton15Props) {
       />
 
       {/* Zona de destino */}
-      { (pasoActual == "comienzoEjercicio" ||
-        (pasoActual === 'felicitacionArrastre' && cajaDepositada)) && (
+      {mostrarContenedor && (
         <div
           ref={contenedorRef}
           className="contenedor-deposito"
@@ -139,8 +162,7 @@ function Raton15({ onTerminar }: Raton15Props) {
       )}
 
       {/* Caja que debe arrastrarse */}
-      {!cajaDepositada && pasoActual == "comienzoEjercicio" && 
-        (tiempoAudio >= 2.1 || esperandoInteraccion) && (
+      {mostrarCaja && (
         <Caja
           forma="cuadrado"
           color="#84C3D8"

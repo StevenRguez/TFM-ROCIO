@@ -1,0 +1,33 @@
+.logo-terminal {
+  position: absolute;
+
+  max-width: 100%;
+  max-height: 60vh;
+  height: auto;
+  display: block;
+
+  object-fit: contain;
+
+  /* Centrado */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  filter:
+    grayscale(1)
+    sepia(1)
+    hue-rotate(65deg)
+    saturate(1.5)
+    brightness(1.15)
+    drop-shadow(0 0 12px rgba(168, 215, 174, 0.25));
+
+  opacity: 0.7;
+  z-index: 1;
+}
+
+/* Ajuste para pantallas pequeñas */
+@media (max-width: 600px) {
+  .logo-terminal {
+    width: 70vw;
+  }
+}

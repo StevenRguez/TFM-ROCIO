@@ -6,9 +6,9 @@ import GestorAudio from '@/componentes_reutilizables/Gestor_audios/Gestor_audios
 import GestorSubtitulos from '@/componentes_reutilizables/Gestor_subtitulos/Gestor_subtitulos'
 import MenuContextual from '@/componentes_reutilizables/Elementos_interactivos/MenuContextual/MenuContextual'
 
-import logoPizarra from '@/assets/logo_pizarra.png'
-import clicDerecho from '@/assets/clic_derecho.png'
-import cuadroDialogo from '@/assets/cuadro_dialogo.png'
+import logoPizarra from '@/assets/raton/logo_pizarra.png'
+import clicDerecho from '@/assets/raton/clic_derecho.png'
+import cuadroDialogo from '@/assets/raton/cuadro_dialogo.png'
 
 import '../../Raton.css'
 

@@ -1,4 +1,5 @@
 import { useRef, useState, type PointerEvent, type ReactNode } from 'react'
+import { useDobleClic } from '../useDobleClic'
 import './Caja.css'
 
 type CajaProps = {
@@ -16,6 +17,8 @@ type CajaProps = {
     y: number
   }
 
+  habilitada?: boolean
+
   onActivar?: () => void
   onSoltar?: (posicion: { x: number; y: number }) => void
 }
@@ -31,6 +34,7 @@ function Caja({
   interaccion = 'click',
   posicion = 'aleatoria',
   coordenadas = { x: 50, y: 50 },
+  habilitada = true,
   onActivar,
   onSoltar,
 }: CajaProps) {
@@ -68,12 +72,19 @@ function Caja({
 
   // Gestiona las interacciones tradicionales.
   function activarCaja() {
+    if (!habilitada) return
     onActivar?.()
   }
 
+  // Detector personalizado de doble clic.
+  const gestionarDobleClic = useDobleClic(
+    activarCaja,
+    800
+  )
+
   // Comienza el arrastre al pulsar el botón izquierdo.
   function iniciarArrastre(evento: PointerEvent<HTMLButtonElement>) {
-    if (!evento.isPrimary || evento.button !== 0) return
+    if (!habilitada || !evento.isPrimary || evento.button !== 0) return
 
     datosArrastre.current = {
       pointerId: evento.pointerId,
@@ -150,7 +161,14 @@ function Caja({
   return (
     <button
       type="button"
-      className={`caja ${imagen || icono ? 'caja-con-imagen' : ''}`}
+      className={[
+        'caja',
+        imagen || icono ? 'caja-con-imagen' : '',
+        arrastrando ? 'caja-arrastrando' : ''
+      ].filter(Boolean).join(' ')}
+
+      disabled={!habilitada}
+
       style={{
         left: `${posicionInicial.x}%`,
         top: `${posicionInicial.y}%`,
@@ -162,9 +180,11 @@ function Caja({
 
         width: `${tamano}px`,
         height: `${tamano}px`,
+
         backgroundColor: imagen || icono
           ? 'transparent'
           : color ?? '#4E9FC1',
+
         borderRadius: forma === 'circulo' ? '50%' : '0%',
 
         // Evita que el navegador interprete el arrastre
@@ -181,12 +201,13 @@ function Caja({
         interaccion === 'hover' ? activarCaja : undefined
       }
 
+      // Gestiona tanto el clic sencillo como el doble clic.
       onClick={
-        interaccion === 'click' ? activarCaja : undefined
-      }
-
-      onDoubleClick={
-        interaccion === 'doubleClick' ? activarCaja : undefined
+        interaccion === 'click'
+          ? activarCaja
+          : interaccion === 'doubleClick'
+            ? gestionarDobleClic
+            : undefined
       }
 
       onPointerDown={
@@ -205,7 +226,7 @@ function Caja({
         interaccion === 'dragDrop' ? cancelarArrastre : undefined
       }
 
-    aria-label={nombre}
+      aria-label={nombre}
     >
       {imagen ? (
         <img

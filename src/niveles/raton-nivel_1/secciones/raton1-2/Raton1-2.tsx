@@ -8,9 +8,9 @@ import GestorSubtitulos from '@/componentes_reutilizables/Gestor_subtitulos/Gest
 
 import Caja from '@/componentes_reutilizables/Elementos_interactivos/Caja/Caja'
 
-import logoPizarra from '@/assets/logo_pizarra.png'
-import imagenBotones from '@/assets/botones_raton.png'
-import clicIzquierdo from '@/assets/clic_izquierdo.png'
+import logoPizarra from '@/assets/raton/logo_pizarra.png'
+import imagenBotones from '@/assets/raton/botones_raton.png'
+import clicIzquierdo from '@/assets/raton/clic_izquierdo.png'
 
 import '../../Raton.css'
 

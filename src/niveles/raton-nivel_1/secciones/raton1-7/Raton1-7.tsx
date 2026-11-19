@@ -2,16 +2,17 @@ import { useEffect, useRef, useState, type MouseEvent } from 'react'
 
 import { subtitulosPorAudio } from './subtitulos1-7'
 import { useSecuenciasNarradas } from '@/componentes_reutilizables/Gestor_audios/useSecuenciasNarradas'
+import { useDobleClic } from '@/componentes_reutilizables/Elementos_interactivos/useDobleClic'
 import GestorAudio from '@/componentes_reutilizables/Gestor_audios/Gestor_audios'
 import GestorSubtitulos from '@/componentes_reutilizables/Gestor_subtitulos/Gestor_subtitulos'
 import Caja from '@/componentes_reutilizables/Elementos_interactivos/Caja/Caja'
 import MenuContextual from '@/componentes_reutilizables/Elementos_interactivos/MenuContextual/MenuContextual'
 
-import logoPizarra from '@/assets/logo_pizarra.png'
-import imagenMovimientoRueda from '@/assets/movimiento_rueda_raton.png'
-import imagenClicDerecho from '@/assets/clic_derecho.png'
-import iconoClic from '@/assets/clic_cuadrado_azul.png'
-import iconoArrastrar from '@/assets/arrastrar_cuadrado_amarillo.png'
+import logoPizarra from '@/assets/raton/logo_pizarra.png'
+import imagenMovimientoRueda from '@/assets/raton/movimiento_rueda_raton.png'
+import imagenClicDerecho from '@/assets/raton/clic_derecho.png'
+import iconoClic from '@/assets/raton/clic_cuadrado_azul.png'
+import iconoArrastrar from '@/assets/raton/arrastrar_cuadrado_amarillo.png'
 
 import './Raton1-7.css'
 import '../../Raton.css'
@@ -329,6 +330,10 @@ function Raton17({ onTerminar }: Raton17Props) {
     continuarTrasInteraccion()
   }
 
+  // Detector de doble clic del botón final.
+  const gestionarDobleClicFinal = 
+    useDobleClic(avanzarAlSiguienteNivel, 800)
+
   // Segundo exacto en el que la narradora menciona el cuadrado rosa.
   // El valor es ilustrativo: debe ajustarse escuchando Raton1-7-3.wav.
   const SEGUNDO_APARICION_CONTENEDOR = 7
@@ -456,7 +461,13 @@ function Raton17({ onTerminar }: Raton17Props) {
         <button
           type="button"
           className="boton-avanzar-nivel"
-          onDoubleClick={avanzarAlSiguienteNivel}
+
+          // No acepta clics mientras se reproduce la narración.
+          disabled={!esperandoInteraccion}
+
+          // Detector personalizado de doble clic.
+          onClick={gestionarDobleClicFinal}
+
           aria-label="Avanzar al siguiente nivel mediante doble clic"
         >
           Avanzar al siguiente nivel

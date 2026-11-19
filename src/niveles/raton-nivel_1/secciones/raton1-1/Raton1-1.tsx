@@ -6,9 +6,9 @@ import GestorSubtitulos from '@/componentes_reutilizables/Gestor_subtitulos/Gest
 
 import Caja from '@/componentes_reutilizables/Elementos_interactivos/Caja/Caja'
 
-import logoPizarra from '@/assets/logo_pizarra.png'
-import imagenRaton from '@/assets/raton.png'
-import imagenCursor from '@/assets/cursor.png'
+import logoPizarra from '@/assets/raton/logo_pizarra.png'
+import imagenRaton from '@/assets/raton/raton.png'
+import imagenCursor from '@/assets/raton/cursor.png'
 
 import '../../Raton.css'
 

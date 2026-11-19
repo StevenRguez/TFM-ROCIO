@@ -28,10 +28,10 @@ export const subtitulosPorAudio = {
     { tiempo: 7,   texto: 'que puede hacer el programa. ' }
   ],
   ejercicioClicDerecho: [
-    { tiempo: 0,   texto: 'Haz clic izquierdo para abrir' },
-    { tiempo: 1.8, texto: 'el cuadro de diálogo, y luego' },
-    { tiempo: 3.3, texto: 'hagamos clic derecho sobre la opción' },
-    { tiempo: 5.1, texto: 'de "ir al siguiente paso".' }
+    { tiempo: 0,   texto: 'Haz clic derecho para abrir' },
+    { tiempo: 2,   texto: 'el cuadro de diálogo, y luego' },
+    { tiempo: 3.3, texto: 'hagamos clic izquierdo sobre la opción' },
+    { tiempo: 5.1, texto: 'de... de "ir al siguiente paso".' }
   ],
   felicitacionClicDerecho: [
     { tiempo: 0,   texto: '¡Oh, vas genial!' },

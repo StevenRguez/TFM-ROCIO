@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { transcripciones } from './subtitulos'
-import GestorAudio from '../../componentes_reutilizables/Gestor_audios/Gestor_audios'
-import GestorSubtitulos from '../../componentes_reutilizables/Gestor_subtitulos/Gestor_subtitulos'
-import logoPizarra from '../../assets/logo_pizarra.png'
+import GestorAudio from '@/componentes_reutilizables/Gestor_audios/Gestor_audios'
+import GestorSubtitulos from '@/componentes_reutilizables/Gestor_subtitulos/Gestor_subtitulos'
+import logoPizarra from '@/assets/raton/logo_pizarra.png'
 import './Introduccion.css'
 
 const audioIntroduccion = '/Audios_generados/Introduccion.wav'
