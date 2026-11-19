@@ -11,7 +11,7 @@ type EstadoTransicion = | 'inactiva' | 'oscureciendo' | 'aclarando'
 
 function App() {
   // Nivel que se está mostrando actualmente.
-  const [nivelActual, setNivelActual] = useState(0)
+  const [nivelActual, setNivelActual] = useState(2)
 
   // Controla la transición entre niveles.
   const [transicion, setTransicion] = useState<EstadoTransicion>('inactiva')

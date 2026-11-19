@@ -1,0 +1,82 @@
+/* =========================================
+   COMPONENTE REUTILIZABLE: CUADRO DE TEXTO
+   ========================================= */
+
+/* Contenedor principal */
+.cuadro-texto-contenedor {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  min-width: 0;
+  gap: 16px;
+}
+
+/* Etiqueta descriptiva */
+.cuadro-texto-etiqueta {
+  font-family: inherit;
+  font-size: 26px;
+  font-weight: 500;
+
+  color: inherit;
+}
+
+/* Estilos comunes para input y textarea */
+.cuadro-texto {
+  display: block;
+
+  width: 100%;
+  min-width: 0;
+  min-height: 52px;
+
+  padding: 14px 18px;
+  box-sizing: border-box;
+
+  font-family: inherit;
+  font-size: clamp(18px, 2vw, 24px);
+  line-height: 1.5;
+
+  color: inherit;
+  background-color: transparent;
+
+  border: 2px solid currentColor;
+  border-radius: 8px;
+
+  caret-color: currentColor;
+
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease;
+}
+
+/* Texto de ejemplo antes de escribir */
+.cuadro-texto::placeholder {
+  color: inherit;
+  opacity: 0.5;
+}
+
+/* Indicador visual cuando el campo recibe el foco */
+.cuadro-texto:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 3px;
+}
+
+/* Cuadro de varias líneas */
+.cuadro-texto-multilinea {
+  min-height: 150px;
+
+  resize: vertical;
+}
+
+/* Estado deshabilitado */
+.cuadro-texto:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Accesibilidad: movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  .cuadro-texto {
+    transition: none;
+  }
+}

@@ -5,6 +5,10 @@
 @import '@/componentes_reutilizables/Estilos/Terminal.css';
 @import '@/componentes_reutilizables/Estilos/logo_terminal.css';
 
+.pantalla-teclado .logo-terminal {
+  opacity: 0.7;
+}
+
 .pantalla-teclado {
   width: 100%;
   min-height: 100vh;
@@ -18,4 +22,73 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Imágenes ilustrativas del nivel */
+.imagenes-tutorial {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 70vh;
+}
+
+.imagen-maquina-escribir, .imagen-teclado-simple {
+  position: absolute;
+  max-width: 70%;
+  max-height: 60vh;
+  width: 30%;
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: contain;
+  top: 65%;
+
+  filter:
+    grayscale(1)
+    sepia(1)
+    hue-rotate(65deg)
+    saturate(1.5)
+    brightness(1.15)
+    drop-shadow(0 0 12px rgba(168, 215, 174, 0.25));
+
+  opacity: 0.8;
+}
+
+.imagen-maquina-escribir {
+  left: 15%;
+}
+
+.imagen-teclado-simple {
+  left: 85%;
+}
+
+/* Cuadro de texto dentro de la terminal */
+.terminal .cuadro-texto {
+  background-color: rgba(0, 0, 0, 0.15);
+  color: #c8e8c5;
+
+  border-color: #647b6d;
+  border-radius: 4px;
+
+  caret-color: #c8e8c5;
+}
+
+/* Respuesta visual cuando el usuario escribe */
+.terminal .cuadro-texto:focus-visible {
+  border-color: #b9deb9;
+
+  outline: 2px solid #b9deb9;
+  outline-offset: 3px;
+}
+
+/* Ejercicios de escritura */
+.terminal .terminal-ejercicio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.terminal-ejercicio .cuadro-texto-contenedor {
+  width: min(850px, 90%);
 }
