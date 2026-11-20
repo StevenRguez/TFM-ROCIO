@@ -6,7 +6,7 @@
 @import '@/componentes_reutilizables/Estilos/logo_terminal.css';
 
 .pantalla-teclado .logo-terminal {
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
 .pantalla-teclado {
@@ -32,9 +32,14 @@
 
   width: 100%;
   height: 70vh;
+
+  pointer-events: none;
 }
 
-.imagen-maquina-escribir, .imagen-teclado-simple {
+.imagen-maquina-escribir, .imagen-teclado-simple,
+.imagen-tecla-retroceso, .imagen-teclado-retroceso,
+.imagen-barra-espaciadora, .imagen-teclado-espacio,
+.imagen-tecla-enter, .imagen-teclado-enter {
   position: absolute;
   max-width: 70%;
   max-height: 60vh;
@@ -59,36 +64,67 @@
   left: 15%;
 }
 
+.imagen-tecla-enter, .imagen-barra-espaciadora,
+.imagen-tecla-retroceso {
+  left: 15%;
+  width: 20%;
+  top: 85%;
+}
+
 .imagen-teclado-simple {
   left: 85%;
 }
 
-/* Cuadro de texto dentro de la terminal */
-.terminal .cuadro-texto {
-  background-color: rgba(0, 0, 0, 0.15);
-  color: #c8e8c5;
-
-  border-color: #647b6d;
-  border-radius: 4px;
-
-  caret-color: #c8e8c5;
+.imagen-teclado-enter, .imagen-teclado-espacio,
+.imagen-teclado-retroceso {
+  left: 82.5%;
+  width: 32%;
+  top: 83%
 }
 
-/* Respuesta visual cuando el usuario escribe */
-.terminal .cuadro-texto:focus-visible {
-  border-color: #b9deb9;
+/* =========================================
+   DISTRIBUCIÓN DE LOS EJERCICIOS
+   ========================================= */
 
-  outline: 2px solid #b9deb9;
-  outline-offset: 3px;
-}
-
-/* Ejercicios de escritura */
-.terminal .terminal-ejercicio {
+/* Centra los ejercicios dentro del área de la terminal */
+.terminal-contenido-ejercicios {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+/* Mantiene los cuadros centrados en su contenedor */
+.terminal-contenido-ejercicios .terminal-ejercicio {
+  position: absolute;
+
+  display: block;
+  z-index: 4;
+
+  /* Permite colocar el cuadro desde su centro */
+  transform: translate(-50%, -50%);
+  
+  left: 50%;
+}
+
+/* Ejercicio de introducción*/
 .terminal-ejercicio .cuadro-texto-contenedor {
   width: min(850px, 90%);
+}
+
+/* Ejercicio de Retroceso */
+.ejercicio-retroceso {
+  top: 10%;
+  width: min(850px, 85vw);
+}
+
+/* Ejercicio de la barra espaciadora */
+.ejercicio-espacio {
+  top: 10%;
+  width: min(750px, 85vw);
+}
+
+/* Ejercicio de salto de línea */
+.ejercicio-enter {
+  top: 15%;
+  width: min(850px, 90vw);
 }

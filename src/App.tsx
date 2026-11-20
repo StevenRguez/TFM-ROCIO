@@ -26,10 +26,8 @@ function App() {
 
     // Si no necesita transición, o el usuario
     // prefiere movimiento reducido, avanzamos directamente.
-    if (
-      !requiereTransicion ||
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    ) {
+    if (!requiereTransicion ||
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       window.scrollTo(0, 0)
       setNivelActual((nivel) => nivel + 1)
       return

@@ -67,3 +67,29 @@
   padding: 30px;
   box-sizing: border-box;
 }
+
+/* Cuadro de texto dentro de la terminal */
+.terminal .cuadro-texto {
+  background-color: rgba(0, 0, 0, 0.75);
+  color: #c8e8c5;
+
+  border-color: #647b6d;
+  border-radius: 4px;
+
+  caret-color: #c8e8c5;
+}
+
+/* Respuesta visual cuando el usuario escribe */
+.terminal .cuadro-texto:focus-visible {
+  border-color: #b9deb9;
+
+  outline: 2px solid #b9deb9;
+  outline-offset: 3px;
+}
+
+/* Ejercicios de escritura */
+.terminal .terminal-ejercicio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

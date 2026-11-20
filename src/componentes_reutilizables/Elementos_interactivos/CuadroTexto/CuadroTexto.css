@@ -64,7 +64,6 @@
 /* Cuadro de varias líneas */
 .cuadro-texto-multilinea {
   min-height: 150px;
-
   resize: vertical;
 }
 
