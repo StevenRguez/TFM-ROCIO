@@ -33,7 +33,7 @@ export const subtitulosPorAudio = {
   ],
   clicIzquierdoBarraEspaciadora: [
     { tiempo: 0,    texto: 'Primero, y ahora que ya sabes usar el ratón...' },
-    { tiempo: 3,    texto: 'haz clic izquierdo donde debería ir ese espacio.' }
+    { tiempo: 3,    texto: 'haz clic izquierdo en donde debería ir ese espacio.' }
   ],
   interaccionBarraEspaciadora: [
     { tiempo: 0,    texto: 'Así está bien.' },
@@ -46,16 +46,35 @@ export const subtitulosPorAudio = {
     { tiempo: 2,    texto: 'Me queda por añadir una última línea.' },
     { tiempo: 4,    texto: 'Si me hicieras el favor' },
     { tiempo: 6,    texto: 'de hacer clic izquierdo de nuevo,' },
-    { tiempo: 7.2,  texto: "después de 'poleo'..." }
+    { tiempo: 7.2,  texto: "después de 'Poleo'..." }
   ],
   interaccionSaltoDeLinea: [
     { tiempo: 0,    texto: 'Genial. Ahora solo necesitaría que le dieses' },
     { tiempo: 2.8,  texto: 'al botón de salto de línea.' }
   ],
   aclaracionSaltoDeLinea: [
-    { tiempo: 0,  texto: 'Vale, ahora sí que puedo terminar de escribir.' },
-    { tiempo: 3,  texto: "Algunos también llaman 'enter' a ese botón," },
-    { tiempo: 5,  texto: 'por si quieres tenerlo en cuenta.' }
+    { tiempo: 0,    texto: 'Vale, ahora sí que puedo terminar de escribir.' },
+    { tiempo: 3,    texto: "Algunos también llaman 'enter' a ese botón," },
+    { tiempo: 5,    texto: 'por si quieres tenerlo en cuenta.' }
+  ],
+  introduccionBloqueoMayusculas: [
+    { tiempo: 0,    texto: 'No sé si recuerdas que antes escribimos' },
+    { tiempo: 2.2,  texto: 'mi nombre, pero estaba todo en minúscula.' },
+    { tiempo: 5,    texto: 'Escribir en mayúsculas es muy simple.' },
+    { tiempo: 7,    texto: 'Mira, pulsa el botón de bloqueo de mayúsculas.' }
+  ],
+  explicacionBloqueoMayusculas: [
+    { tiempo: 0,    texto: 'Cuando lo pulsas, todo lo que escribes' },
+    { tiempo: 2,    texto: 'saldrá en mayúsculas.' },
+    { tiempo: 3,    texto: 'Hagamos una prueba.' }
+  ],
+  introduccionEjercicioBloqueoMayusculas: [
+    { tiempo: 0,    texto: 'Escribe mi nombre de nuevo: ROCIO.' },
+    { tiempo: 2.1,  texto: 'Luego, volvamos a escribirlo en minúsculas.' }
+  ],
+  ejercicioBloqueoMayusculas: [
+    { tiempo: 0,  texto: 'Por cierto, para volver a escribir en minúsculas,' },
+    { tiempo: 3,  texto: 'basta con apretar de nuevo el mismo botón.' }
   ],
   felicitacionFinDeNivel: [
     { tiempo: 0,  texto: 'Jo, ¡muchas gracias por tu ayuda!' }

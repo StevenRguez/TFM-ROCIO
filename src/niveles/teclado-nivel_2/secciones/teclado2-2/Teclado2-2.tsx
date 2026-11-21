@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 import { subtitulosPorAudio } from './subtitulos2-2'
 import { useSecuenciasNarradas } from '@/componentes_reutilizables/Gestor_audios/useSecuenciasNarradas'
@@ -14,6 +14,8 @@ import imagenBarraEspaciadora from '@/assets/teclado/barra_espaciadora.png'
 import imagenTecladoBarraEspaciadora from '@/assets/teclado/teclado_barra_espaciadora.png'
 import imagenTeclaEnter from '@/assets/teclado/tecla_enter.png'
 import imagenTecladoEnter from '@/assets/teclado/teclado_tecla_enter.png'
+import imagenTeclaBloqMayus from '@/assets/teclado/tecla_bloqueo_mayusculas.png'
+import imagenTecladoBloqMayus from '@/assets/teclado/teclado_bloqueo_mayusculas.png'
 
 import '../../Teclado.css'
 
@@ -66,6 +68,24 @@ const secuenciaTeclado22 = [
   },
   {
     audio: '/Audios_generados/teclado-nivel_2/2-2_Teclas_especiales/Teclado2-2-11.wav',
+    subtitulos: 'introduccionBloqueoMayusculas',
+    esperarInteraccion: true
+  },
+  {
+    audio: '/Audios_generados/teclado-nivel_2/2-2_Teclas_especiales/Teclado2-2-12.wav',
+    subtitulos: 'explicacionBloqueoMayusculas',
+  },
+  {
+    audio: '/Audios_generados/teclado-nivel_2/2-2_Teclas_especiales/Teclado2-2-13.wav',
+    subtitulos: 'introduccionEjercicioBloqueoMayusculas',
+  },
+  {
+    audio: '/Audios_generados/teclado-nivel_2/2-2_Teclas_especiales/Teclado2-2-14.wav',
+    subtitulos: 'ejercicioBloqueoMayusculas',
+    esperarInteraccion: true
+  },
+  {
+    audio: '/Audios_generados/teclado-nivel_2/2-2_Teclas_especiales/Teclado2-2-15.wav',
     subtitulos: 'felicitacionFinDeNivel',
   }
 ] as const
@@ -76,6 +96,7 @@ const TEXTO_SIN_ESPACIO = 'MentaPoleo'
 const TEXTO_CON_ESPACIO = 'Menta Poleo'
 const TEXTO_CON_SALTO = 'Menta Poleo\n'
 const TEXTO_FINAL = 'Menta Poleo\nEs mi infusión favorita.'
+const TEXTO_ESPERADO_MAYUSCULAS = 'ROCIO rocio'
 
 // Momento en el que la narradora comienza a escribir el ejemplo.
 const SEGUNDO_APARICION_TEXTO = 3.4
@@ -138,6 +159,8 @@ function Teclado22({ onTerminar }: Teclado22Props) {
   // Obtiene los subtítulos de la narración actual.
   const transcripciones = subtitulosPorAudio[audioActual.subtitulos]
 
+  // EJERCICIO DE RETROCESO
+
   // Estado del ejercicio de Retroceso.
   const [textoRetroceso, setTextoRetroceso] = useState('')
 
@@ -146,14 +169,11 @@ function Teclado22({ onTerminar }: Teclado22Props) {
     pasoActual === 'introduccionBarraRetroceso' &&
     tiempoAudio >= SEGUNDO_APARICION_TEXTO
 
-  // Escribe progresivamente el texto del ejercicio de Retroceso.
+  // Garantiza que el texto esté completo antes de comenzar el ejercicio.
   useEffect(() => {
     if (!iniciarEscrituraRetroceso) return
 
-    return escribirProgresivamente(
-      TEXTO_ERRONEO,
-      setTextoRetroceso
-    )
+    return escribirProgresivamente(TEXTO_ERRONEO, setTextoRetroceso)
   }, [iniciarEscrituraRetroceso])
 
   // Cuadro de texto del ejercicio de Retroceso.
@@ -167,34 +187,8 @@ function Teclado22({ onTerminar }: Teclado22Props) {
   const permitirRetroceso =
     pasoActual === 'interaccionBarraRetroceso' && esperandoInteraccion
 
+  // EJERCICIO DE BARRA ESPACIADORA
 
-  // Estado del ejercicio de Enter.
-  const [textoEnter, setTextoEnter] = useState(TEXTO_CON_ESPACIO)
-
-  // Completa progresivamente la frase tras el salto de línea.
-  useEffect(() => {
-    if (pasoActual !== 'aclaracionSaltoDeLinea') return
-
-    return escribirProgresivamente(
-      TEXTO_FINAL,
-      setTextoEnter,
-      TEXTO_CON_SALTO.length
-    )
-  }, [pasoActual])
-
-  // Cuadro de texto del ejercicio de Enter.
-  // Aparece cuando comienza la explicación del salto de línea.
-  const mostrarCuadroEnter =
-    pasoActual === 'introduccionSaltoDeLinea' ||
-    pasoActual === 'interaccionSaltoDeLinea' ||
-    pasoActual === 'aclaracionSaltoDeLinea' ||
-    pasoActual === 'felicitacionFinDeNivel'
-
-  // Determina cuándo el usuario puede modificar cada texto.
-  const permitirEnter =
-    pasoActual === 'interaccionSaltoDeLinea' && esperandoInteraccion
-
-  
   // Estado del ejercicio de la barra espaciadora.
   const [textoEspacio, setTextoEspacio] = useState('')
 
@@ -207,24 +201,169 @@ function Teclado22({ onTerminar }: Teclado22Props) {
   useEffect(() => {
     if (!iniciarEscrituraEspacio) return
 
-    return escribirProgresivamente(
-      TEXTO_SIN_ESPACIO,
-      setTextoEspacio
-    )
+    return escribirProgresivamente(TEXTO_SIN_ESPACIO, setTextoEspacio)
   }, [iniciarEscrituraEspacio])
+
+  // Garantiza que las palabras estén completas antes del ejercicio.
+  useEffect(() => {
+    if (pasoActual === 'introduccionBarraEspaciadora') {
+      setTextoEspacio(TEXTO_SIN_ESPACIO)
+    }
+  }, [pasoActual])
+
+  // Determina cuándo debe aparecer el cuadro de Enter
+  // durante la introducción del salto de línea.
+  const mostrarEnterDuranteIntroduccion =
+    pasoActual === 'introduccionSaltoDeLinea' &&
+    (tiempoAudio >= 2.5 || esperandoInteraccion)
 
   // Cuadro de texto del ejercicio de la barra espaciadora.
   // Aparece tras completar el ejercicio de Retroceso.
   const mostrarCuadroEspacio =
     (pasoActual === 'felicitacionBarraRetroceso' &&
      tiempoAudio >= SEGUNDO_APARICION_SEGUNDO_TEXTO) ||
-    pasoActual === 'introduccionBarraEspaciadora' ||
-    pasoActual === 'clicIzquierdoBarraEspaciadora' ||
-    pasoActual === 'interaccionBarraEspaciadora'
+     pasoActual === 'introduccionBarraEspaciadora' ||
+     pasoActual === 'clicIzquierdoBarraEspaciadora' ||
+     pasoActual === 'interaccionBarraEspaciadora' ||
+    (pasoActual === 'introduccionSaltoDeLinea' &&
+    !mostrarEnterDuranteIntroduccion)
 
   // Determina cuándo el usuario puede modificar cada texto.
   const permitirEspacio =
     pasoActual === 'interaccionBarraEspaciadora' && esperandoInteraccion
+  
+  // EJERCICIO DE SALTO DE LINEA
+
+  // Estado del ejercicio de Enter.
+  const [textoEnter, setTextoEnter] = useState(TEXTO_CON_ESPACIO)
+
+  // Completa progresivamente la frase tras el salto de línea.
+  useEffect(() => {
+    if (pasoActual !== 'aclaracionSaltoDeLinea') return
+
+    return escribirProgresivamente(TEXTO_FINAL, setTextoEnter,
+      TEXTO_CON_SALTO.length)
+  }, [pasoActual])
+
+  // Cuadro de texto del ejercicio de Enter.
+  // Aparece cuando comienza la explicación del salto de línea.
+  const mostrarCuadroEnter =
+    mostrarEnterDuranteIntroduccion ||
+    pasoActual === 'interaccionSaltoDeLinea' ||
+    pasoActual === 'aclaracionSaltoDeLinea'
+
+  // Determina cuándo el usuario puede modificar cada texto.
+  const permitirEnter =
+    pasoActual === 'interaccionSaltoDeLinea' && esperandoInteraccion
+
+  // EJERCICIO DE BLOQUEO DE MAYÚSCULAS
+  
+  // Estado del ejercicio de bloqueo de mayúsculas.
+  const [textoMayusculas, setTextoMayusculas] = useState('')
+
+  // Registra la primera pulsación de Bloq Mayús.
+  const [bloqueoMayusculasPulsado, setBloqueoMayusculasPulsado] =
+    useState(false)
+
+  // Evita continuar dos veces una misma interacción.
+  const avancesBloqueo = useRef({
+    activacion: false,
+    ejercicio: false
+  })
+
+  // Cuadro de texto del ejercicio de bloqueo de mayúsculas.
+  const mostrarCuadroMayusculas =
+    pasoActual === 'introduccionEjercicioBloqueoMayusculas' ||
+    pasoActual === 'ejercicioBloqueoMayusculas' ||
+    pasoActual === 'felicitacionBloqueoMayusculas' ||
+    pasoActual === 'felicitacionFinDeNivel'
+
+  // Determina cuándo el usuario puede modificar el texto.
+  const permitirMayusculas =
+    pasoActual === 'ejercicioBloqueoMayusculas' &&
+    esperandoInteraccion
+
+  // Detecta las pulsaciones físicas de la tecla Bloq Mayús.
+  useEffect(() => {
+
+    // Primera pulsación: activar Bloq Mayús.
+    const esperandoActivacion =
+      pasoActual === 'introduccionBloqueoMayusculas'
+
+    if (!esperandoActivacion) return
+
+    function gestionarTecla(evento: KeyboardEvent) {
+
+      // Solo nos interesa la tecla de bloqueo de mayúsculas.
+      if (evento.key !== 'CapsLock' && evento.code !== 'CapsLock') {
+        return
+      }
+
+      // Evita registrar pulsaciones repetidas al mantenerla presionada.
+      if (evento.repeat) return
+
+      if (esperandoActivacion) {
+        setBloqueoMayusculasPulsado(true)
+      }
+    }
+
+    // Escuchamos la pulsación aunque el usuario no esté escribiendo.
+    window.addEventListener('keydown', gestionarTecla)
+    window.addEventListener('keyup', gestionarTecla)
+
+    // Dejamos de escuchar cuando cambia la fase del ejercicio.
+    return () => {
+      window.removeEventListener('keydown', gestionarTecla)
+      window.removeEventListener('keyup', gestionarTecla)
+    }
+
+  }, [
+    pasoActual,
+    bloqueoMayusculasPulsado
+  ])
+
+  // Continúa cuando se ha pulsado Bloq Mayús y termina la narración.
+  useEffect(() => {
+
+    if (pasoActual !== 'introduccionBloqueoMayusculas' ||
+        !esperandoInteraccion ||
+        !bloqueoMayusculasPulsado ||
+        avancesBloqueo.current.activacion) {
+      return
+    }
+
+    avancesBloqueo.current.activacion = true
+    continuarTrasInteraccion()
+
+  }, [
+    pasoActual,
+    esperandoInteraccion,
+    bloqueoMayusculasPulsado,
+    continuarTrasInteraccion
+  ])
+
+  // Finaliza el ejercicio cuando el usuario ha escrito 
+  // correctamente ambos nombres.
+  useEffect(() => {
+
+    if (pasoActual !== 'ejercicioBloqueoMayusculas' ||
+        !esperandoInteraccion ||
+        textoMayusculas !== TEXTO_ESPERADO_MAYUSCULAS ||
+        avancesBloqueo.current.ejercicio) {
+      return
+    }
+
+    avancesBloqueo.current.ejercicio = true
+    continuarTrasInteraccion()
+
+  }, [
+    pasoActual,
+    esperandoInteraccion,
+    textoMayusculas,
+    continuarTrasInteraccion
+  ])
+
+  // GESTIÓN DE LAS INTERACCIONES
 
   // Gestiona las modificaciones realizadas por el usuario.
 
@@ -273,6 +412,19 @@ function Teclado22({ onTerminar }: Teclado22Props) {
     }
   }
 
+  // Ejercicio de Bloq Mayús: escribir en mayúsculas y minúsculas.
+  function gestionarMayusculas(nuevoTexto: string) {
+
+    // Impedimos modificaciones fuera del ejercicio.
+    if (!permitirMayusculas) return
+
+    // Actualizamos el contenido del cuadro.
+    setTextoMayusculas(nuevoTexto)
+
+    // La validación final se realiza cuando también se ha
+    // registrado la segunda pulsación de Bloq Mayús.
+  }
+
   // Gestiona la posición del cursor dentro de los cuadros de texto.
 
   // Ejercicio: colocar el cursor entre Menta y Poleo.
@@ -313,6 +465,14 @@ function Teclado22({ onTerminar }: Teclado22Props) {
       continuarTrasInteraccion()
     }
   }
+
+
+  // Mantiene visibles las imágenes de Bloq Mayús
+  // hasta que el usuario complete la interacción.
+  const mostrarImagenBloqMayus =
+    (pasoActual === 'introduccionBloqueoMayusculas' &&
+     (tiempoAudio >= 7 || esperandoInteraccion)) ||
+    pasoActual === 'ejercicioBloqueoMayusculas'
 
   return (
     <main className="pantalla-teclado">
@@ -410,6 +570,26 @@ function Teclado22({ onTerminar }: Teclado22Props) {
               />
             )}
 
+            {/* Imagen de la tecla Bloq. Mayus. */}
+            {mostrarImagenBloqMayus && (
+              <img
+                className="imagen-tecla-bloq-mayus"
+                src={imagenTeclaBloqMayus}
+                alt="Imagen ilustrativa de la tecla de bloqueo 
+                     de mayúsculas."
+              />
+            )}
+
+            {/* Imagen de la tecla Bloq. Mayus. en un teclado */}
+            {mostrarImagenBloqMayus && (
+              <img
+                className="imagen-teclado-bloq-mayus"
+                src={imagenTecladoBloqMayus}
+                alt="Imagen representativa de la tecla de 
+                     bloqueo de mayúsculas en un teclado."
+              />
+            )}
+
           </div>
 
           {/* Ejercicio interactivo de escritura. Barra de retroceso. */}
@@ -455,6 +635,21 @@ function Teclado22({ onTerminar }: Teclado22Props) {
                 etiqueta="Introduce un salto de línea al final del texto."
                 multilinea={true}
                 soloLectura={!permitirEnter}
+              />
+
+            </div>
+          )}
+
+          {/* Ejercicio interactivo de escritura. Bloqueo de mayúsculas. */}
+          {mostrarCuadroMayusculas && (
+            <div className="terminal-ejercicio ejercicio-mayusculas">
+
+              <CuadroTexto
+                texto={textoMayusculas}
+                onCambiarTexto={gestionarMayusculas}
+                etiqueta="Escribe 'ROCIO rocio'. No olvides el espacio."
+                enfocarAutomaticamente={permitirMayusculas}
+                soloLectura={!permitirMayusculas}
               />
 
             </div>

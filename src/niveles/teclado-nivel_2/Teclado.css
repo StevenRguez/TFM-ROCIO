@@ -39,7 +39,8 @@
 .imagen-maquina-escribir, .imagen-teclado-simple,
 .imagen-tecla-retroceso, .imagen-teclado-retroceso,
 .imagen-barra-espaciadora, .imagen-teclado-espacio,
-.imagen-tecla-enter, .imagen-teclado-enter {
+.imagen-tecla-enter, .imagen-teclado-enter,
+.imagen-tecla-bloq-mayus, .imagen-teclado-bloq-mayus {
   position: absolute;
   max-width: 70%;
   max-height: 60vh;
@@ -65,7 +66,7 @@
 }
 
 .imagen-tecla-enter, .imagen-barra-espaciadora,
-.imagen-tecla-retroceso {
+.imagen-tecla-retroceso, .imagen-tecla-bloq-mayus {
   left: 15%;
   width: 20%;
   top: 85%;
@@ -76,7 +77,7 @@
 }
 
 .imagen-teclado-enter, .imagen-teclado-espacio,
-.imagen-teclado-retroceso {
+.imagen-teclado-retroceso, .imagen-teclado-bloq-mayus {
   left: 82.5%;
   width: 32%;
   top: 83%
@@ -126,5 +127,11 @@
 /* Ejercicio de salto de línea */
 .ejercicio-enter {
   top: 15%;
-  width: min(850px, 90vw);
+  width: min(850px, 85vw);
+}
+
+/* Ejercicio de bloqueo de mayúsculas */
+.ejercicio-mayusculas {
+  top: 10%;
+  width: min(850px, 85vw);
 }
