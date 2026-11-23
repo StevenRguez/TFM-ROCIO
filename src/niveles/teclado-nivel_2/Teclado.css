@@ -40,7 +40,8 @@
 .imagen-tecla-retroceso, .imagen-teclado-retroceso,
 .imagen-barra-espaciadora, .imagen-teclado-espacio,
 .imagen-tecla-enter, .imagen-teclado-enter,
-.imagen-tecla-bloq-mayus, .imagen-teclado-bloq-mayus {
+.imagen-tecla-bloq-mayus, .imagen-teclado-bloq-mayus,
+.imagen-teclas-numeros, .imagen-teclado-numerico {
   position: absolute;
   max-width: 70%;
   max-height: 60vh;
@@ -66,10 +67,16 @@
 }
 
 .imagen-tecla-enter, .imagen-barra-espaciadora,
-.imagen-tecla-retroceso, .imagen-tecla-bloq-mayus {
+.imagen-tecla-retroceso, .imagen-tecla-bloq-mayus,
+.imagen-teclas-numeros {
   left: 15%;
   width: 20%;
   top: 85%;
+}
+
+.imagen-teclas-numeros {
+  left: 17%;
+  width: 30%;
 }
 
 .imagen-teclado-simple {
@@ -77,7 +84,8 @@
 }
 
 .imagen-teclado-enter, .imagen-teclado-espacio,
-.imagen-teclado-retroceso, .imagen-teclado-bloq-mayus {
+.imagen-teclado-retroceso, .imagen-teclado-bloq-mayus,
+.imagen-teclado-numerico {
   left: 82.5%;
   width: 32%;
   top: 83%
@@ -134,4 +142,173 @@
 .ejercicio-mayusculas {
   top: 10%;
   width: min(850px, 85vw);
+}
+
+/* Ejercicio de teclado numérico */
+.ejercicio-numeros {
+  top: 10%;
+  text-align: center;
+  width: min(500px, 85vw);
+}
+
+/* Ejercicio de lista de la compra */
+.ejercicio-lista-compra {
+  top: 20%;
+  width: min(700px, 100vw);
+}
+
+
+/* =========================================
+   AVANCE FINAL DEL NIVEL DE TECLADO
+   ========================================= */
+
+/* Contenedor del indicador de avance */
+.terminal .terminal-avance-final {
+  position: absolute;
+  z-index: 4;
+
+  left: 50%;
+  top: 55%;
+
+  width: min(850px, 90%);
+
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+
+  /* No permite interactuar mediante el ratón */
+  pointer-events: none;
+}
+
+/* Distribución de la imagen */
+.terminal-avance-principal {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 35px;
+}
+
+/* Apariencia inicial del botón */
+.terminal .boton-avanzar-terminal {
+  position: relative;
+
+  width: min(440px, 100%);
+  min-height: 80px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 20px 28px;
+
+  background: linear-gradient(
+    180deg,
+    #294335 0%,
+    #17261e 100%
+  );
+
+  color: #c8e8c5;
+
+  border: 2px solid #7ca287;
+  border-radius: 6px;
+
+  font-family: 'Courier New', Courier, monospace;
+  font-size: clamp(16px, 1.8vw, 23px);
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 0.5px;
+
+  text-shadow: 0 0 8px rgba(185, 222, 185, 0.4);
+
+  box-shadow:
+    inset 0 2px 0 rgba(200, 232, 197, 0.12),
+    0 7px 0 #0a110d,
+    0 11px 18px rgba(0, 0, 0, 0.45),
+    0 0 15px rgba(168, 215, 174, 0.15);
+
+  transform: translateY(0);
+
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+/* Textura CRT sobre el botón */
+.terminal .boton-avanzar-terminal::after {
+  content: '';
+
+  position: absolute;
+  inset: 0;
+
+  border-radius: inherit;
+
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+
+  pointer-events: none;
+}
+
+/* Apariencia del botón después de pulsar Enter */
+.terminal .boton-avanzar-terminal--pulsado {
+  transform: translateY(6px);
+
+  background: linear-gradient(
+    180deg,
+    #3c6549 0%,
+    #274432 100%
+  );
+
+  border-color: #b9deb9;
+
+  box-shadow:
+    inset 0 3px 10px rgba(0, 0, 0, 0.5),
+    0 1px 0 #0a110d,
+    0 0 18px rgba(185, 222, 185, 0.25);
+}
+
+/* Texto explicativo bajo el botón */
+.terminal .terminal-avance-estado {
+  margin: 0;
+
+  color: #a8c8ac;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: clamp(14px, 1.4vw, 18px);
+  text-align: center;
+}
+
+/* Adaptación a pantallas pequeñas */
+@media (max-width: 700px) {
+  .terminal-avance-principal {
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  .terminal .terminal-avance-final {
+    top: 53%;
+    width: 90%;
+  }
+
+  .terminal .boton-avanzar-terminal {
+    width: 100%;
+  }
+}
+
+/* Respeta las preferencias de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  .terminal .boton-avanzar-terminal {
+    transition: none;
+  }
 }

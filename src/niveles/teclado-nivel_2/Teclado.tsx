@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import Teclado21 from './secciones/teclado2-1/Teclado2-1'
 import Teclado22 from './secciones/teclado2-2/Teclado2-2'
+import Teclado23 from './secciones/teclado2-3/Teclado2-3'
 
 function Teclado({ onTerminar }: { onTerminar: () => void }) {
-  const [seccionActual, setSeccionActual] = useState(1)
+  const [seccionActual, setSeccionActual] = useState(2)
 
   const TOTAL_SECCIONES = 7
 
@@ -21,6 +22,7 @@ function Teclado({ onTerminar }: { onTerminar: () => void }) {
 
       {seccionActual === 0 && <Teclado21 onTerminar={avanzarSeccion} />}
       {seccionActual === 1 && <Teclado22 onTerminar={avanzarSeccion} />}
+      {seccionActual === 2 && <Teclado23 onTerminar={avanzarSeccion} />}
 
     </div>
   )
