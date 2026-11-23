@@ -1,0 +1,67 @@
+/* =========================================
+   AVANCE FINAL DEL NIVEL DE TECLADO
+   ========================================= */
+
+/* Apariencia del botón de avance */
+.terminal .boton-avanzar-terminal {
+  position: absolute;
+  z-index: 4;
+
+  left: 50%;
+  top: 40vh;
+  transform: translate(-50%, -50%);
+
+  width: min(75vw, 650px);
+  min-height: 150px;
+  padding: 20px 28px;
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: linear-gradient(180deg, #426853, #1b2c23);
+  color: #c9e4c6;
+
+  border: 2px solid #7ca287;
+  border-radius: 12px;
+
+  font-family: 'Courier New', Courier, monospace;
+  font-size: clamp(45px, 3vw, 32px);
+  font-weight: 800;
+  text-align: center;
+
+  text-shadow: 0 0 8px rgba(130, 134, 130, 0.4);
+
+  box-shadow:
+    0 7px 0 #0a110d,
+    0 11px 18px rgba(0, 0, 0, 0.45),
+    0 0 15px rgba(168, 215, 174, 0.15);
+
+  /* No permite interactuar mediante el ratón */
+  pointer-events: none;
+
+  transition: transform 0.15s ease,
+              background 0.15s ease,
+              box-shadow 0.15s ease;
+}
+
+/* Apariencia del botón después de pulsar Enter */
+.terminal .boton-avanzar-terminal--pulsado {
+  transform: translate(-50%, calc(-50% + 6px));
+
+  background: linear-gradient(180deg, #3c6549, #274432);
+  border-color: #b9deb9;
+
+  box-shadow:
+    inset 0 3px 10px rgba(0, 0, 0, 0.5),
+    0 1px 0 #0a110d,
+    0 0 18px rgba(185, 222, 185, 0.25);
+}
+
+/* Respeta las preferencias de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  .terminal .boton-avanzar-terminal {
+    transition: none;
+  }
+}

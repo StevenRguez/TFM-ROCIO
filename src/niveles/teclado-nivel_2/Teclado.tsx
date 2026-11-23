@@ -4,7 +4,7 @@ import Teclado22 from './secciones/teclado2-2/Teclado2-2'
 import Teclado23 from './secciones/teclado2-3/Teclado2-3'
 
 function Teclado({ onTerminar }: { onTerminar: () => void }) {
-  const [seccionActual, setSeccionActual] = useState(2)
+  const [seccionActual, setSeccionActual] = useState(0)
 
   const TOTAL_SECCIONES = 7
 

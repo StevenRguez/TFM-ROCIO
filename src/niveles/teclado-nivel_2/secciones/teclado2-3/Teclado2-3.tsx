@@ -10,8 +10,8 @@ import CuadroTexto from '@/componentes_reutilizables/Elementos_interactivos/Cuad
 import logoTerminal from '@/assets/teclado/logo_terminal.png'
 import imagenTeclaRetroceso from '@/assets/teclado/tecla_retroceso.png'
 import imagenTecladoRetroceso from '@/assets/teclado/teclado_tecla_retroceso.png'
-import imagenBarraEspaciadora from '@/assets/teclado/barra_espaciadora.png'
-import imagenTecladoBarraEspaciadora from '@/assets/teclado/teclado_barra_espaciadora.png'
+// import imagenBarraEspaciadora from '@/assets/teclado/barra_espaciadora.png'
+// import imagenTecladoBarraEspaciadora from '@/assets/teclado/teclado_barra_espaciadora.png'
 import imagenTeclaEnter from '@/assets/teclado/tecla_enter.png'
 import imagenTecladoEnter from '@/assets/teclado/teclado_tecla_enter.png'
 import imagenTeclaBloqMayus from '@/assets/teclado/tecla_bloqueo_mayusculas.png'
@@ -20,6 +20,7 @@ import imagenTecladoNumerico from '@/assets/teclado/teclado_numerico.png'
 import imagenTeclasNumeros from '@/assets/teclado/teclas_numeros.png'
 
 import '../../Teclado.css'
+import './Teclado2-3.css'
 
 // Secuencia de audios de la sección 2-2: teclas especiales.
 const secuenciaTeclado23 = [
@@ -210,8 +211,7 @@ function Teclado23({ onTerminar }: Teclado23Props) {
     'ejercicioCebollas',
     'introduccionEjercicioCorreccionPan',
     'especificacionEjercicioCorreccionPan',
-    'ejercicioYogures',
-    'felicitacionNivelFinal'
+    'ejercicioYogures'
   ].includes(pasoActual)
 
   // Obtiene el texto esperado para el ejercicio actual.
@@ -264,42 +264,112 @@ function Teclado23({ onTerminar }: Teclado23Props) {
   // DETECCIÓN DE TECLAS ESPECIALES
   // =========================================
 
-  // Detecta la pulsación física de Enter para avanzar de nivel.
+  // Registra las teclas especiales utilizadas durante cada ejercicio.
+  const [teclasPulsadas, setTeclasPulsadas] = useState<Record<string, boolean>>({})
+
+  // Detecta las pulsaciones físicas de las teclas especiales.
   useEffect(() => {
 
-    // Solo escuchamos durante la felicitación final.
-    const esperandoEnter =
-      pasoActual === 'felicitacionNivelFinal' &&
-      !enterFinalPulsado
+    // Identifica la tecla correspondiente al ejercicio actual.
+    let teclaEsperada: string | null = null
 
-    if (!esperandoEnter) return
+    switch (pasoActual) {
+
+      case 'ejercicioPan':
+      case 'ejercicioHuevos':
+      case 'felicitacionNivelFinal':
+        teclaEsperada = 'Enter'
+        break
+
+      case 'especificacionEjercicioCorreccionPan':
+        teclaEsperada = 'Backspace'
+        break
+
+      case 'ejercicioCebollas':
+      case 'ejercicioYogures':
+        teclaEsperada = 'CapsLock'
+        break
+    }
+
+    // No escuchamos el teclado si no estamos en un ejercicio.
+    if (!teclaEsperada) return
 
     function gestionarTecla(evento: KeyboardEvent) {
 
-      // Solo nos interesa la tecla Enter.
-      if (evento.key !== 'Enter') return
+      // Solo nos interesa la tecla correspondiente al ejercicio.
+      if (
+        evento.key !== teclaEsperada &&
+        evento.code !== teclaEsperada
+      ) {
+        return
+      }
 
       // Evitamos registrar pulsaciones repetidas.
       if (evento.repeat) return
 
-      // Evitamos que Enter provoque otras acciones.
-      evento.preventDefault()
+      // Enter y Retroceso se validan al presionar la tecla.
+      // Bloq Mayús puede detectarse también al soltarla.
+      if (
+        teclaEsperada !== 'CapsLock' &&
+        evento.type !== 'keydown'
+      ) {
+        return
+      }
 
-      // Registramos la pulsación para modificar el botón.
-      setEnterFinalPulsado(true)
+      // Ejercicio final: pulsar Enter para avanzar de nivel.
+      if (pasoActual === 'felicitacionNivelFinal') {
+
+        // Evitamos que Enter provoque otras acciones.
+        evento.preventDefault()
+
+        // Registramos la pulsación para modificar el botón.
+        setEnterFinalPulsado(true)
+        return
+      }
+
+      // En los ejercicios de Enter y Retroceso,
+      // comprobamos que el usuario esté escribiendo en la lista.
+      if (
+        teclaEsperada === 'Enter' ||
+        teclaEsperada === 'Backspace'
+      ) {
+        if (
+          !(evento.target instanceof HTMLTextAreaElement) ||
+          !evento.target.closest('.ejercicio-lista-compra')
+        ) {
+          return
+        }
+      }
+
+      // Para borrar el pan, primero debe colocarse correctamente
+      // el cursor al final de la línea correspondiente.
+      if (
+        pasoActual === 'especificacionEjercicioCorreccionPan' &&
+        !cursorPanColocado
+      ) {
+        return
+      }
+
+      // Registramos la tecla utilizada en el ejercicio actual.
+      setTeclasPulsadas((anteriores) => ({
+        ...anteriores,
+        [pasoActual]: true
+      }))
     }
 
-    // Escuchamos la pulsación del teclado.
+    // Escuchamos las pulsaciones del teclado.
     window.addEventListener('keydown', gestionarTecla)
+    window.addEventListener('keyup', gestionarTecla)
 
     // Dejamos de escuchar cuando cambia la fase.
     return () => {
       window.removeEventListener('keydown', gestionarTecla)
+      window.removeEventListener('keyup', gestionarTecla)
     }
 
   }, [
     pasoActual,
-    enterFinalPulsado
+    cursorPanColocado
   ])
 
   // =========================================
@@ -391,22 +461,30 @@ function Teclado23({ onTerminar }: Teclado23Props) {
     pasoActual === 'introduccionNumeros' || pasoActual === 'ejercicioNumeros'
 
   // Determina cuándo mostrar las imágenes de la barra espaciadora.
-  const mostrarImagenEspacio =
-    pasoActual === 'ejercicioBotellasAgua'
+  /*const mostrarImagenEspacio =
+    pasoActual === 'ejercicioBotellasAgua'*/
 
   // Determina cuándo mostrar las imágenes de Enter.
   const mostrarImagenEnter =
-    pasoActual === 'ejercicioPan' || pasoActual === 'ejercicioHuevos' ||
-   (pasoActual === 'felicitacionNivelFinal' && tiempoAudio >= 9)
+    (pasoActual === 'ejercicioPan' &&
+     !teclasPulsadas.ejercicioPan) || 
+    (pasoActual === 'ejercicioHuevos' && tiempoAudio >= 2.9 && 
+     !teclasPulsadas.ejercicioHuevos) || 
+    (pasoActual === 'felicitacionNivelFinal' && (
+     tiempoAudio >= 9 || esperandoInteraccion || enterFinalPulsado))
 
   // Determina cuándo mostrar las imágenes de Retroceso.
   const mostrarImagenRetroceso =
     pasoActual === 'introduccionEjercicioCorreccionPan' ||
-    pasoActual === 'especificacionEjercicioCorreccionPan'
+    (pasoActual === 'especificacionEjercicioCorreccionPan' &&
+     !teclasPulsadas.especificacionEjercicioCorreccionPan)
 
   // Determina cuándo mostrar las imágenes de Bloq Mayús.
   const mostrarImagenBloqMayus =
-    pasoActual === 'ejercicioCebollas' || pasoActual === 'ejercicioYogures'
+    (pasoActual === 'ejercicioCebollas' &&
+     !teclasPulsadas.ejercicioCebollas) || 
+    (pasoActual === 'ejercicioYogures' &&
+     !teclasPulsadas.ejercicioYogures)
 
   // Obtiene la etiqueta correspondiente a la actividad.
   const etiquetaLista =
@@ -573,35 +651,15 @@ function Teclado23({ onTerminar }: Teclado23Props) {
             </div>
           )}
 
-          {/* Indicador visual para avanzar al siguiente nivel mediante Enter */}
+          {/* Botón visual para avanzar al siguiente nivel mediante Enter */}
           {mostrarAvanceFinal && (
-            <div className="terminal-avance-final">
-
-              <div className="terminal-avance-principal">
-
-                {/* Botón visual que simula la pulsación de Enter */}
-                <div
-                  className={['boton-avanzar-terminal', enterFinalPulsado
-                            ? 'boton-avanzar-terminal--pulsado' : ''
-                  ].filter(Boolean).join(' ')}
-                  aria-hidden="true"
-                >
-                  Avanzar al siguiente nivel
-                </div>
-
-              </div>
-
-              {/* Indicaciones del estado de la interacción */}
-              <p
-                className="terminal-avance-estado"
-                role="status"
-                aria-live="polite"
-              >
-                {enterFinalPulsado
-                  ? 'Avanzando al siguiente nivel...'
-                  : 'Pulsa Enter en tu teclado para continuar.'}
-              </p>
-
+            <div
+              className={`boton-avanzar-terminal ${
+                enterFinalPulsado ? 'boton-avanzar-terminal--pulsado' : ''
+              }`}
+              aria-hidden="true"
+            >
+              Avanzar al siguiente nivel
             </div>
           )}
 

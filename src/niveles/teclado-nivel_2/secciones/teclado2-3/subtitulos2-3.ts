@@ -27,7 +27,7 @@ export const subtitulosPorAudio = {
     { tiempo: 3.2,  texto: '¿Me podrías ayudar a escribir una lista?' }
   ],
   aparicionListaCompra: [
-    { tiempo: 0,    texto: 'um... mira, te dejo un espacio para que' },
+    { tiempo: 0,    texto: 'Mira, te dejo un espacio para que' },
     { tiempo: 2,    texto: 'escribas aquí, y te iré diciendo lo que necesito.' }
   ],
   ejercicioBotellasAgua: [
@@ -73,6 +73,6 @@ export const subtitulosPorAudio = {
     { tiempo: 9.1,  texto: "pulsa el botón de 'Enter'." }
   ],
   avanceSiguienteNivel: [
-    { tiempo: 0,    texto: 'Sí, así me gusta.' }
+    { tiempo: 0,    texto: 'Así me gusta.' }
   ]
 }
