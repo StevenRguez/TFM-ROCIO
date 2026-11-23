@@ -8,7 +8,7 @@ import Raton16 from './secciones/raton1-6/Raton1-6'
 import Raton17 from './secciones/raton1-7/Raton1-7'
 
 function Raton({ onTerminar }: { onTerminar: () => void }) {
-  const [seccionActual, setSeccionActual] = useState(0)
+  const [seccionActual, setSeccionActual] = useState(6)
 
   const TOTAL_SECCIONES = 7
 

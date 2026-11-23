@@ -77,6 +77,15 @@ type CajaEjercicio = {
   y: number
 }
 
+// Límites de una caja respecto a la ventana.
+// Se utilizan para comprobar su superposición con el contenedor.
+type LimitesCaja = {
+  left: number
+  right: number
+  top: number
+  bottom: number
+}
+
 // Primera ronda: ocho cajas azules y cuatro amarillas.
 // Las coordenadas se expresan en porcentajes de la pizarra.
 const cajasIniciales: CajaEjercicio[] = [
@@ -114,6 +123,9 @@ const cajasNuevas: CajaEjercicio[] = [
   { id: 'y7', tipo: 'amarilla', grupo: 'nuevas', x: 58, y: 46 },
   { id: 'y8', tipo: 'amarilla', grupo: 'nuevas', x: 42, y: 86 }
 ]
+
+// Porcentaje mínimo de superposición necesario para aceptar una caja.
+const PORCENTAJE_MINIMO_DEPOSITO = 0.10
 
 type Raton17Props = { onTerminar: () => void }
 
@@ -178,16 +190,24 @@ function Raton17({ onTerminar }: Raton17Props) {
     if (!esperandoInteraccion) return
 
     // Segunda ronda: narramos cuando quedan siete cajas.
-    if (pasoActual === 'explicacionCambiarCajas' && rondaNuevaActiva &&
-        cajasPendientes === 7) {
+    if (
+      pasoActual === 'explicacionCambiarCajas' &&
+      rondaNuevaActiva &&
+      cajasPendientes === 7
+    ) {
       continuarTrasInteraccion()
       return
     }
 
     // Finalización de los ejercicios de cada grupo.
-    if ((pasoActual === 'instruccionesCajas' || 
+    if (
+      (
+        pasoActual === 'instruccionesCajas' ||
         pasoActual === 'buscarMasCajasRuedaRaton' ||
-        pasoActual === 'quedanSiete') && cajasPendientes === 0) {
+        pasoActual === 'quedanSiete'
+      ) &&
+      cajasPendientes === 0
+    ) {
       continuarTrasInteraccion()
     }
 
@@ -201,8 +221,10 @@ function Raton17({ onTerminar }: Raton17Props) {
 
   // Permitimos el scroll al terminar sus instrucciones.
   useEffect(() => {
-    if (pasoActual === 'buscarMasCajasRuedaRaton' 
-      && esperandoInteraccion) {
+    if (
+      pasoActual === 'buscarMasCajasRuedaRaton' &&
+      esperandoInteraccion
+    ) {
       setScrollHabilitado(true)
     }
   }, [pasoActual, esperandoInteraccion])
@@ -249,26 +271,94 @@ function Raton17({ onTerminar }: Raton17Props) {
   }
 
   // Valida el depósito de una caja amarilla.
-  function depositarCajaAmarilla(
+  function depositarCajaAmarilla (
     caja: CajaEjercicio,
-    posicion: { x: number; y: number }
+    posicion: { x: number; y: number },
+    limitesCaja?: LimitesCaja
   ) {
-    if (!esperandoInteraccion || caja.grupo !== grupoEnCurso) {
+
+    console.log('INTENTO DE DEPÓSITO', {
+      caja: caja.id,
+      grupoCaja: caja.grupo,
+      grupoEnCurso,
+      pasoActual,
+      esperandoInteraccion,
+      contenedorDisponible: !!contenedorRef.current,
+      posicion
+    })
+
+    // Solo admitimos cajas del grupo correspondiente al ejercicio.
+    // No es necesario esperar a que termine la narración.
+    if (caja.grupo !== grupoEnCurso) {
       return
     }
 
     const contenedor = contenedorRef.current
     if (!contenedor) return
 
+    // Obtenemos los límites reales del contenedor rosa.
     const limites = contenedor.getBoundingClientRect()
 
-    const dentroDelContenedor =
-      posicion.x >= limites.left &&
-      posicion.x <= limites.right &&
-      posicion.y >= limites.top &&
-      posicion.y <= limites.bottom
+    let depositoValido = false
 
-    if (!dentroDelContenedor) return
+    if (limitesCaja) {
+
+      // Calculamos cuánto se superponen horizontalmente
+      // la caja amarilla y el contenedor rosa.
+      const interseccionX = Math.max(
+        0,
+        Math.min(limites.right, limitesCaja.right) -
+        Math.max(limites.left, limitesCaja.left)
+      )
+
+      // Calculamos cuánto se superponen verticalmente
+      // la caja amarilla y el contenedor rosa.
+      const interseccionY = Math.max(
+        0,
+        Math.min(limites.bottom, limitesCaja.bottom) -
+        Math.max(limites.top, limitesCaja.top)
+      )
+
+      // Calculamos el área total de la caja amarilla.
+      const anchoCaja = limitesCaja.right - limitesCaja.left
+      const altoCaja = limitesCaja.bottom - limitesCaja.top
+
+      const areaCaja = anchoCaja * altoCaja
+
+      // Calculamos qué proporción de la caja amarilla
+      // se encuentra dentro del contenedor rosa.
+      const porcentajeDentro =
+        areaCaja > 0
+          ? (interseccionX * interseccionY) / areaCaja
+          : 0
+
+      // Aceptamos el depósito si la superposición
+      // alcanza el porcentaje mínimo establecido.
+      depositoValido =
+        porcentajeDentro >= PORCENTAJE_MINIMO_DEPOSITO
+
+    } else {
+
+      // Compatibilidad con versiones de Caja que solamente
+      // comuniquen la posición del cursor al soltarla.
+      depositoValido =
+        posicion.x >= limites.left &&
+        posicion.x <= limites.right &&
+        posicion.y >= limites.top &&
+        posicion.y <= limites.bottom
+    }
+
+    console.log('RESULTADO DEL DEPÓSITO', {
+    caja: caja.id,
+    depositoValido,
+    limitesCaja,
+    limitesContenedor: limites,
+    scrollActual: window.scrollY
+  })
+
+    // Si la caja no está suficientemente dentro,
+    // no consideramos válido el depósito.
+    if (!depositoValido) return
 
     // Eliminamos la caja de la pizarra.
     setCajas((actuales) =>
@@ -322,7 +412,10 @@ function Raton17({ onTerminar }: Raton17Props) {
 
   // Gestiona el doble clic del botón final.
   function avanzarAlSiguienteNivel() {
-    if (pasoActual !== 'consultaAvance' || !esperandoInteraccion) {
+    if (
+      pasoActual !== 'consultaAvance' ||
+      !esperandoInteraccion
+    ) {
       return
     }
 
@@ -331,7 +424,7 @@ function Raton17({ onTerminar }: Raton17Props) {
   }
 
   // Detector de doble clic del botón final.
-  const gestionarDobleClicFinal = 
+  const gestionarDobleClicFinal =
     useDobleClic(avanzarAlSiguienteNivel, 800)
 
   // Segundo exacto en el que la narradora menciona el cuadrado rosa.
@@ -342,10 +435,12 @@ function Raton17({ onTerminar }: Raton17Props) {
     pasoActual === 'instruccionesCajas' && (
       tiempoAudio >= SEGUNDO_APARICION_CONTENEDOR ||
       esperandoInteraccion
-    )) || pasoActual === 'buscarMasCajasRuedaRaton' || 
-          pasoActual === 'cambiarCajas' ||
-          pasoActual === 'explicacionCambiarCajas' ||
-          pasoActual === 'quedanSiete'
+    )
+  ) ||
+    pasoActual === 'buscarMasCajasRuedaRaton' ||
+    pasoActual === 'cambiarCajas' ||
+    pasoActual === 'explicacionCambiarCajas' ||
+    pasoActual === 'quedanSiete'
 
   return (
     <main
@@ -379,25 +474,26 @@ function Raton17({ onTerminar }: Raton17Props) {
       <div className="imagenes-tutorial">
 
         {/* Imagen explicativa del ratón */}
-        {(pasoActual == "buscarMasCajasRuedaRaton" && tiempoAudio >= 1) && 
-         !esperandoInteraccion && (
-          <img
-            className="imagen-explicativa-flotante"
-            src={imagenMovimientoRueda}
-            alt="Imagen ilustrativa que explica cómo se mueve la rueda de
-                 un ratón."
-          />
-        )}
+        {(
+          pasoActual === 'buscarMasCajasRuedaRaton' &&
+          tiempoAudio >= 1
+        ) &&
+          !esperandoInteraccion && (
+            <img
+              className="imagen-explicativa-flotante"
+              src={imagenMovimientoRueda}
+              alt="Imagen ilustrativa que explica cómo se mueve la rueda de un ratón."
+            />
+          )}
 
-        {pasoActual == "explicacionCambiarCajas" && 
-         !esperandoInteraccion && (
-          <img
-            className="imagen-explicativa-flotante"
-            src={imagenClicDerecho}
-            alt="Imagen ilustrativa que explica dónde se encuentra el clic
-                 derecho en un ratón."
-          />
-        )}
+        {pasoActual === 'explicacionCambiarCajas' &&
+          !esperandoInteraccion && (
+            <img
+              className="imagen-explicativa-flotante"
+              src={imagenClicDerecho}
+              alt="Imagen ilustrativa que explica dónde se encuentra el clic derecho en un ratón."
+            />
+          )}
 
       </div>
 
@@ -419,18 +515,37 @@ function Raton17({ onTerminar }: Raton17Props) {
           tamano={120}
           posicion="fija"
           coordenadas={{ x: caja.x, y: caja.y }}
-          imagen={caja.tipo === 'azul' ? iconoClic : iconoArrastrar }
-          interaccion={ caja.tipo === 'azul' ? 'click' : 'dragDrop' }
-          nombre={ caja.tipo === 'azul'
+          imagen={
+            caja.tipo === 'azul'
+              ? iconoClic
+              : iconoArrastrar
+          }
+          interaccion={
+            caja.tipo === 'azul'
+              ? 'click'
+              : 'dragDrop'
+          }
+          nombre={
+            caja.tipo === 'azul'
               ? 'Caja azul: hacer clic'
               : 'Caja amarilla: arrastrar al contenedor rosa'
           }
-          onActivar={ caja.tipo === 'azul'
+          onActivar={
+            caja.tipo === 'azul'
               ? () => seleccionarCajaAzul(caja)
               : undefined
           }
-          onSoltar={ caja.tipo === 'amarilla'
-              ? (posicion) => depositarCajaAmarilla(caja, posicion)
+
+          // Comunicamos los límites de la caja al soltarla
+          // para comprobar su superposición con el contenedor.
+          onSoltar={
+            caja.tipo === 'amarilla'
+              ? (posicion, limitesCaja) =>
+                  depositarCajaAmarilla(
+                    caja,
+                    posicion,
+                    limitesCaja
+                  )
               : undefined
           }
         />

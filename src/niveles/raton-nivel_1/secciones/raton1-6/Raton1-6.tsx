@@ -14,7 +14,7 @@ import imagenClicIzquierdo from '@/assets/raton/clic_izquierdo.png'
 
 import '../../Raton.css'
 
-// Secuencia de audios de la sección de doble clic
+// Secuencia de audios de la sección de rueda del ratón
 const secuenciaRaton16 = [
   {
     audio: '/Audios_generados/raton-nivel_1/1-6_Rueda_raton/Raton1-6-1.wav',
@@ -163,7 +163,7 @@ function Raton16({ onTerminar }: Raton16Props) {
           tamano={150}
           interaccion="click"
           posicion="fija"
-          coordenadas={{ x: 50, y: 95 }}
+          coordenadas={{ x: 50, y: 55 }}
           onActivar={continuarTrasInteraccion}
         />
       )}
